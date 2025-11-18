@@ -9,6 +9,8 @@
 
 > 本项目基于 [JoJoLoader](https://github.com/Pizz33/JoJoLoader) 改进而来。
 
+![alt text](static/front.png)
+
 ## ✨ 特性
 
 ### 🔐 加密方式
@@ -172,9 +174,7 @@ cargo build --release --no-default-features \
 3. 在 `config/plugins.json` 中注册
 
 
-## 📸 截图
-
-![alt text](static/front.png)
+## 📸 免杀截图
 
 过火绒：
 ![alt text](static/pass1.png)
