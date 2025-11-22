@@ -1,10 +1,12 @@
-[build]
-target = "x86_64-pc-windows-msvc"
-
 [unstable]
 build-std = ["std", "panic_abort"]
 
 [target.x86_64-pc-windows-msvc]
 rustflags = [
-"-C", "link-arg=/DEBUG:NONE",
+  "-C", "link-arg=/DEBUG:NONE",
+]
+
+[target.x86_64-pc-windows-gnu]
+rustflags = [
+  "-C", "link-arg=-Wl,--strip-debug",
 ]

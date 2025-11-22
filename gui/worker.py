@@ -6,6 +6,7 @@ import os
 import sys
 import subprocess
 import shutil
+import platform
 from PyQt5.QtCore import QThread, pyqtSignal
 from .config_manager import (
     load_plugins_manifest,
@@ -76,6 +77,13 @@ class WorkerThread(QThread):
         """构建Rust项目"""
         self.log_signal.emit('Rust 构建中...')
         
+        # 检测操作系统并设置目标
+        os_name = platform.system().lower()
+        if os_name == "windows":
+            self.target = "x86_64-pc-windows-msvc"
+        else:
+            self.target = "x86_64-pc-windows-gnu"
+        
         env = os.environ.copy()
         env['ICON_PATH'] = self.params['icon_path']
         env['RUN_MODE'] = self.params['run_mode']
@@ -85,10 +93,12 @@ class WorkerThread(QThread):
         features_str = ','.join(features)
         
         self.log_signal.emit(f'本次编译启用 features: {features_str}')
+        self.log_signal.emit(f'编译目标: {self.target}')
         
         build_cmd = [
             'cargo', 'build', '--release',
             '--no-default-features',
+            '--target', self.target,
             f'--features={features_str}'
         ]
         
@@ -144,7 +154,7 @@ class WorkerThread(QThread):
         """复制输出文件"""
         self.log_signal.emit('复制输出...')
         
-        src_file = os.path.join('target', 'x86_64-pc-windows-msvc' ,'release', 'rsl.exe')
+        src_file = os.path.join('target', self.target, 'release', 'rsl.exe')
         out_dir = 'output'
         
         if not os.path.exists(out_dir):
