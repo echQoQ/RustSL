@@ -335,3 +335,6 @@ cargo build --release --no-default-features \
 - **重构并新增alloc_mem模块**：新增alloc_mem_global和alloc_mem_local实现内存分配
 - **重构并新增exec模块**：新增EnumUILanguagesW 回调注入和GDI 家族变种注入
 - **完善跨平台兼容性**： 修复 Linux 和 macOS 下的编译和运行问题
+
+### 2025-11-23
+- **新增编译目标选择功能**：在 GUI 中添加编译目标下拉菜单，支持多种 Windows 目标架构。
