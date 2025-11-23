@@ -4,9 +4,10 @@ UI组件工厂模块
 """
 import os
 from PyQt5.QtCore import QSize
-from PyQt5.QtWidgets import QComboBox, QCheckBox, QGridLayout
+from PyQt5.QtWidgets import QComboBox, QCheckBox, QGridLayout, QListView, QStyledItemDelegate
 from PyQt5.QtGui import QIcon
 from .config_manager import load_plugins_manifest, get_default_value
+
 
 
 def get_folder_icon():
@@ -123,5 +124,42 @@ def create_run_mode_combobox():
             if combo.itemData(i) == default_rm:
                 combo.setCurrentIndex(i)
                 break
+    
+    return combo
+
+
+
+def create_target_combobox():
+    """创建编译目标下拉框"""
+    combo = QComboBox()
+    combo.setView(QListView())
+    combo.setItemDelegate(QStyledItemDelegate())
+    
+    target_icon = get_icon('target')
+    
+    # 定义可用的编译目标
+    targets = [
+        ('x86_64-pc-windows-msvc', 'Windows MSVC (x64)'),
+        ('i686-pc-windows-msvc', 'Windows MSVC (x86)'),
+        ('x86_64-pc-windows-gnu', 'Windows GNU (x64)'),
+        ('i686-pc-windows-gnu', 'Windows GNU (x86)'),
+        ('aarch64-pc-windows-msvc', 'Windows MSVC (ARM64)'),
+    ]
+    
+    for target, label in targets:
+        combo.addItem(target_icon, label, target)
+    
+    # 根据操作系统设置默认值
+    import platform
+    os_name = platform.system().lower()
+    if os_name == "windows":
+        default_target = "x86_64-pc-windows-msvc"
+    else:
+        default_target = "x86_64-pc-windows-gnu"
+    
+    for i in range(combo.count()):
+        if combo.itemData(i) == default_target:
+            combo.setCurrentIndex(i)
+            break
     
     return combo

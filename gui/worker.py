@@ -77,12 +77,8 @@ class WorkerThread(QThread):
         """构建Rust项目"""
         self.log_signal.emit('Rust 构建中...')
         
-        # 检测操作系统并设置目标
-        os_name = platform.system().lower()
-        if os_name == "windows":
-            self.target = "x86_64-pc-windows-msvc"
-        else:
-            self.target = "x86_64-pc-windows-gnu"
+        # 使用用户选择的target
+        self.target = self.params.get('target', 'x86_64-pc-windows-msvc')
         
         env = os.environ.copy()
         env['ICON_PATH'] = self.params['icon_path']

