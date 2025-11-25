@@ -23,7 +23,7 @@ def save_encrypted_base64(file_path, b64_data):
         f.write(b64_data)
 
 
-PLUGIN_DIR = Path(__file__).parent / 'encrypt_plugins'
+PLUGIN_DIR = Path(__file__).parent / 'encrypt_lib'
 
 
 class PluginLoadError(Exception):

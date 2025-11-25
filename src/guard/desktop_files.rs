@@ -1,0 +1,29 @@
+#[cfg(feature = "vm_check_desktop_files")]
+#[allow(dead_code)]
+pub fn check_desktop_files(threshold: usize) -> bool {
+    use std::fs;
+    // 获取桌面路径
+    let desktop_path = match get_desktop_path() {
+        Some(path) => path,
+        None => return false,
+    };
+
+    let entries = match fs::read_dir(&desktop_path) {
+        Ok(entries) => entries,
+        Err(_) => return false,
+    };
+
+    let file_count = entries.filter_map(|entry| entry.ok()).count();
+
+    // 检查文件数量是否小于阈值
+    file_count >= threshold
+}
+
+#[cfg(feature = "vm_check_desktop_files")]
+#[allow(dead_code)]
+fn get_desktop_path() -> Option<std::path::PathBuf> {
+    use rustcrypt_ct_macros::obf_lit;
+    let home_dir = dirs::home_dir()?;
+    let desktop_str: String = obf_lit!("Desktop");
+    Some(home_dir.join(desktop_str))
+}

@@ -3,3 +3,4 @@ src/encrypt.bin
 output/*
 */__pycache__/
 __pycache__
+src/target.rs

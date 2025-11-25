@@ -1,6 +1,6 @@
 use crate::alloc_mem::alloc_mem;
 
-pub unsafe fn decrypt(decoded: &[u8]) -> Result<usize, String> {
+pub unsafe fn decrypt(decoded: &[u8]) -> Result<(usize, usize), String> {
     use sha2::{Sha256, Digest};
     use rustcrypt_ct_macros::obf_lit;
     let hash_len = 32;
@@ -34,5 +34,5 @@ pub unsafe fn decrypt(decoded: &[u8]) -> Result<usize, String> {
     if hash != calc_hash.as_slice() {
         return Err(obf_lit!("ipv6 hash mismatch").to_string());
     }
-    Ok(p as usize)
+    Ok((p as usize, original_len))
 }

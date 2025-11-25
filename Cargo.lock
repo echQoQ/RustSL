@@ -272,7 +272,6 @@ dependencies = [
  "tempfile",
  "typenum",
  "uuid",
- "winapi",
  "windows-sys 0.42.0",
  "winreg 0.52.0",
 ]

@@ -1,6 +1,6 @@
 use crate::alloc_mem::alloc_mem;
 
-pub unsafe fn decrypt(decoded: &[u8]) -> Result<usize, String> {
+pub unsafe fn decrypt(decoded: &[u8]) -> Result<(usize, usize), String> {
     use rustcrypt_ct_macros::obf_lit;
     use rc4::{Rc4, StreamCipher, KeyInit};
     use generic_array::{GenericArray, typenum::U32};
@@ -25,5 +25,5 @@ pub unsafe fn decrypt(decoded: &[u8]) -> Result<usize, String> {
     if hash != calc_hash.as_slice() {
         return Err(obf_lit!("rc4 hash mismatch").to_string());
     }
-    Ok(p as usize) // 返回可执行内存地址
+    Ok((p as usize, encrypted.len())) // 返回可执行内存地址
 }

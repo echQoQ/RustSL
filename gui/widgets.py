@@ -1,5 +1,5 @@
 import os
-from PyQt5.QtWidgets import QComboBox, QFileDialog
+from PyQt5.QtWidgets import QComboBox, QFileDialog, QListView, QStyledItemDelegate
 from PyQt5.QtGui import QIcon
 
 def list_ico_files():
@@ -11,6 +11,8 @@ def list_ico_files():
 class BinComboBox(QComboBox):
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.setView(QListView())
+        self.setItemDelegate(QStyledItemDelegate())
         self.refresh()
 
     def refresh(self):
@@ -42,6 +44,8 @@ class BinComboBox(QComboBox):
 class IcoComboBox(QComboBox):
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.setView(QListView())
+        self.setItemDelegate(QStyledItemDelegate())
         self.refresh()
 
     def refresh(self):

