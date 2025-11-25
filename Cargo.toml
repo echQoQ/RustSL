@@ -2,7 +2,7 @@ cargo-features = ["trim-paths", "panic-immediate-abort"]
 
 [package]
 name = "rsl"
-version = "1.0.0"
+version = "1.1.0"
 edition = "2021"
 
 [dependencies]
