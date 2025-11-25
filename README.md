@@ -344,7 +344,7 @@ cargo build --release --no-default-features \
 
 - 更新`decrypt`函数，返回原始长度和指针。
 - 引入 `create_remote_thread` 实现远程线程注入。
-- 添加 `early_bird_apc` 作为早期 APC 注入方法。
+- 添加 `early_bird_apc`  注入方法。
 - 将鼠标移动和滴答检测模块化为独立文件。
 - 更新主执行流程以处理不同的执行模式。
 - 添加了针对目标程序和 PID 处理的模板。
