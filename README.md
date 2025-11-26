@@ -342,6 +342,10 @@ cargo build --release --no-default-features \
 
 ⭐ 如果这个项目对你有帮助，请给一个 Star！
 
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=echQoQ/RustSL&type=date&legend=top-left)](https://www.star-history.com/#echQoQ/RustSL&type=date&legend=top-left)
+
 ---
 
 ## 📝 更新日志
