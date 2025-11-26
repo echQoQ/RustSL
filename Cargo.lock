@@ -101,17 +101,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "bumpalo"
+version = "3.19.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "46c5e41b57b8bba42a04676d81cb89e9ee8e859a1a66f80a5a72e1cb76b34d43"
+
+[[package]]
 name = "cbc"
 version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "26b52a9543ae338f279b96b0b9fed9c8093744685043739079ce85cd58f289a6"
 dependencies = [
- "cipher",
+ "cipher 0.4.4",
 ]
-name = "bumpalo"
-version = "3.19.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "46c5e41b57b8bba42a04676d81cb89e9ee8e859a1a66f80a5a72e1cb76b34d43"
 
 [[package]]
 name = "cc"
@@ -524,13 +526,13 @@ name = "rsl"
 version = "1.1.1"
 dependencies = [
  "aes",
- "base64",
- "cbc",
- "cipher",
  "aes-gcm",
  "ascon-aead",
+ "base64",
+ "cbc",
  "chacha20 0.8.2",
  "chacha20poly1305",
+ "cipher 0.4.4",
  "ctr",
  "dirs",
  "embed-resource",
@@ -542,6 +544,7 @@ dependencies = [
  "sha2",
  "sm4",
  "tempfile",
+ "typenum",
  "uuid",
  "windows-sys 0.42.0",
  "winreg 0.52.0",
