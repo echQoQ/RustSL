@@ -5,12 +5,15 @@
     { "id": "mac", "label": "mac", "encrypt_arg": "mac", "feature": "decrypt_mac" },
     { "id": "uuid", "label": "uuid", "encrypt_arg": "uuid", "feature": "decrypt_uuid" },
     { "id": "rc4", "label": "rc4", "encrypt_arg": "rc4", "feature": "decrypt_rc4" },
-    { "id": "aes", "label": "aes", "encrypt_arg": "aes", "feature": "decrypt_aes" }
+    { "id": "aes", "label": "aes", "encrypt_arg": "aes", "feature": "decrypt_aes" },
+    { "id": "xchacha20", "label": "xchacha20", "encrypt_arg": "xchacha20", "feature": "decrypt_xchacha20" }
   ],
   "alloc_mem_modes": [
     { "id": "alloc_mem_va", "label": "VirtualAlloc", "feature": "alloc_mem_va" },
     { "id": "alloc_mem_global", "label": "GlobalAlloc", "feature": "alloc_mem_global" },
-    { "id": "alloc_mem_local", "label": "LocalAlloc", "feature": "alloc_mem_local" }
+    { "id": "alloc_mem_local", "label": "LocalAlloc", "feature": "alloc_mem_local" },
+    { "id": "alloc_mem_heap", "label": "HeapAlloc", "feature": "alloc_mem_heap" },
+    { "id": "alloc_mem_mapview", "label": "MapViewOfFile", "feature": "alloc_mem_mapview" }
   ],
   "run_modes": [
     { "id": "create_thread", "label": "CreateThread 直接执行 (create_thread)", "feature": "run_create_thread", "pattern": 1 },

