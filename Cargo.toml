@@ -19,6 +19,9 @@ serde = { version = "1.0", features = ["derive"] }
 rc4 = "0.1"
 generic-array = "0.14"
 typenum = "1.16"
+aes = "0.8"
+cipher = "0.4"
+cbc = "0.1"
 
 [build-dependencies]
 embed-resource = "1.8.0"
@@ -33,6 +36,7 @@ decrypt_ipv4 = ["base64_decode"]               # 启用IPv4解密
 decrypt_ipv6 = ["base64_decode"]               # 启用IPv6解密
 decrypt_mac = ["base64_decode"]                # 启用MAC解密
 decrypt_uuid = ["base64_decode"]               # 启用UUID解密
+decrypt_aes = ["base64_decode"]                # 启用AES解密
 
 # 内存分配方式
 alloc_mem_va = []
