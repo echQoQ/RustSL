@@ -184,6 +184,40 @@ python main.py
 - 文件复制到 `output/` 目录
 - 签名伪造（如启用）
 
+## 🪟 Windows 7 兼容性配置（可选）
+
+### 环境要求
+
+要启用 Windows 7 兼容性构建，您需要下载并配置以下两个兼容性库：
+
+### 1. VC-LTL5 (Visual C++ Low Level Thread Library)
+VC-LTL5 是一个轻量级的 Windows 运行时库，提供了对 Windows 7 的向下兼容支持。
+
+**下载地址**：https://github.com/Chuyu-Team/VC-LTL5/releases
+
+**推荐版本**：VC-LTL-5.2.2-Binary.zip
+
+### 2. YY-Thunks (Windows API Thunk Library)
+YY-Thunks 提供了对较新 Windows API 的向下兼容 thunk 实现。
+
+**下载地址**：https://github.com/Chuyu-Team/YY-Thunks/releases
+
+**推荐版本**：YY-Thunks-1.1.7-Binary.zip
+
+### 环境变量配置
+
+下载并解压上述两个库后，需要设置以下环境变量：
+
+#### (Windows)
+1. 右键点击"此电脑" → "属性" → "高级系统设置"
+2. 点击"环境变量"
+3. 在"系统变量"中添加：
+   - 变量名：`VC_LTL`，变量值：`C:\path\to\VC-LTL5`
+   - 变量名：`YY_THUNKS`，变量值：`C:\path\to\YY-Thunks`
+
+然后就可以使用Win7兼容模式编译加载器了。
+
+
 ## ⚙️ 配置文件
 
 `config/plugins.json` 控制所有功能模块：
@@ -317,6 +351,9 @@ cargo build --release --no-default-features \
 
 - [JoJoLoader](https://github.com/Pizz33/JoJoLoader) by [@Pizz33](https://github.com/Pizz33)
 - [sigthief](https://github.com/secretsquirrel/SigThief) - 签名伪造工具
+- [felixmaker/thunk](https://github.com/felixmaker/thunk) - Windows 7 兼容性支持
+- [VC-LTL5](https://github.com/Chuyu-Team/VC-LTL5) - Windows 7 兼容性支持
+- [YY-Thunks](https://github.com/Chuyu-Team/YY-Thunks) - Windows 7 兼容性支持
 - Rust 社区
 - PyQt5 开发团队
 
@@ -346,3 +383,11 @@ cargo build --release --no-default-features \
 - 将鼠标移动和滴答检测模块化为独立文件。
 - 更新主执行流程以处理不同的执行模式。
 - 添加了针对目标程序和 PID 处理的模板。
+
+### 2025-11-26
+- **新增Windows 7兼容性支持**：
+  - 参照[felixmaker/thunk](https://github.com/felixmaker/thunk)写了src/thunk.rs用于Win7兼容性支持。如果要启用请按照教程配置环境，详细查看[Windows 7 兼容性配置](#windows-7-兼容性配置可选)。
+  - 添加GUI复选框控制Win7兼容模式（需要按照环境要求配置VC-LTL5和YY-Thunks）
+- **重构构建系统**：
+  - 将 `target.rs` 生成逻辑从GUI移至 `build.rs`，通过feature环境变量控制
+  - 将 `icon.rc` 生成逻辑从GUI移至 `build.rs`，通过环境变量控制

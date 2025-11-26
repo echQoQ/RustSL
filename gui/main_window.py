@@ -202,10 +202,15 @@ class LoaderGUI(QWidget):
         self.target_box = create_target_combobox()
         self.target_box.setFixedWidth(fixed_height)
         
+        # Win7 兼容勾选框
+        self.win7_checkbox = QCheckBox("Win7 兼容")
+        self.win7_checkbox.setChecked(False)  # 默认非win7
+        
         self.gen_btn = QPushButton(QIcon(os.path.join('gui', 'icons', 'rocket.ico')), '')
         self.gen_btn.setIconSize(QSize(100, 100))
         self.gen_btn.setFixedSize(fixed_height, fixed_height)
         
+        right_layout.addWidget(self.win7_checkbox)
         right_layout.addWidget(self.target_box)
         right_layout.addWidget(self.gen_btn)
         
@@ -292,7 +297,8 @@ class LoaderGUI(QWidget):
             'mem_mode': mem_mode,
             'target': target,
             'target_program': target_program,
-            'target_pid': target_pid
+            'target_pid': target_pid,
+            'win7_compat': self.win7_checkbox.isChecked()
         }
     
     def on_gen_error(self, msg):

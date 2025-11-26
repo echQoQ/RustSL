@@ -1,4 +1,0 @@
-use rustcrypt_ct_macros::{{obf_lit_bytes}};
-use std::sync::LazyLock;
-
-pub static TARGET_PROGRAM: LazyLock<Vec<u8>> = LazyLock::new(|| obf_lit_bytes!(br"{}"));
