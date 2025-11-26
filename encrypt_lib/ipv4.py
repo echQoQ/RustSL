@@ -1,4 +1,3 @@
-
 name = 'ipv4'
 description = 'Encode binary as IPv4 addresses (comma separated) with leading sha256 and length'
 

@@ -4,7 +4,8 @@
     { "id": "ipv6", "label": "ipv6", "encrypt_arg": "ipv6", "feature": "decrypt_ipv6" },
     { "id": "mac", "label": "mac", "encrypt_arg": "mac", "feature": "decrypt_mac" },
     { "id": "uuid", "label": "uuid", "encrypt_arg": "uuid", "feature": "decrypt_uuid" },
-    { "id": "rc4", "label": "rc4", "encrypt_arg": "rc4", "feature": "decrypt_rc4" }
+    { "id": "rc4", "label": "rc4", "encrypt_arg": "rc4", "feature": "decrypt_rc4" },
+    { "id": "aes", "label": "aes", "encrypt_arg": "aes", "feature": "decrypt_aes" }
   ],
   "alloc_mem_modes": [
     { "id": "alloc_mem_va", "label": "VirtualAlloc", "feature": "alloc_mem_va" },

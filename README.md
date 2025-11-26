@@ -40,6 +40,7 @@
 - **IPv6** - 将 Shellcode 转换为 IPv6 地址格式
 - **MAC** - 将 Shellcode 转换为 MAC 地址格式
 - **UUID** - 将 Shellcode 转换为 UUID 格式
+- **AES** - 高级加密标准(AES-256-CBC)
 - 可拓展...
 
 ### 💾 内存分配
@@ -171,7 +172,7 @@ python main.py
 
 #### 2. 选择配置
 在 GUI 界面中选择：
-- **加密方式**：RC4 / IPv4 / IPv6 / MAC / UUID
+- **加密方式**：RC4 / IPv4 / IPv6 / MAC / UUID / AES
 - **运行模式**：CreateThread
 - **内存分配**：VirtualAlloc
 - **VM 检测**：勾选需要的检测项
@@ -228,7 +229,8 @@ YY-Thunks 提供了对较新 Windows API 的向下兼容 thunk 实现。
     { "id": "ipv6", "label": "ipv6", "encrypt_arg": "ipv6", "feature": "decrypt_ipv6" },
     { "id": "mac", "label": "mac", "encrypt_arg": "mac", "feature": "decrypt_mac" },
     { "id": "uuid", "label": "uuid", "encrypt_arg": "uuid", "feature": "decrypt_uuid" },
-    { "id": "rc4", "label": "rc4", "encrypt_arg": "rc4", "feature": "decrypt_rc4" }
+    { "id": "rc4", "label": "rc4", "encrypt_arg": "rc4", "feature": "decrypt_rc4" },
+    { "id": "aes", "label": "aes", "encrypt_arg": "aes", "feature": "decrypt_aes" }
   ],
   "alloc_mem_modes": [
     { "id": "alloc_mem_va", "label": "VirtualAlloc", "feature": "alloc_mem_va" },

@@ -22,8 +22,5 @@ pub fn check_desktop_files(threshold: usize) -> bool {
 #[cfg(feature = "vm_check_desktop_files")]
 #[allow(dead_code)]
 fn get_desktop_path() -> Option<std::path::PathBuf> {
-    use rustcrypt_ct_macros::obf_lit;
-    let home_dir = dirs::home_dir()?;
-    let desktop_str: String = obf_lit!("Desktop");
-    Some(home_dir.join(desktop_str))
+    dirs::desktop_dir()
 }

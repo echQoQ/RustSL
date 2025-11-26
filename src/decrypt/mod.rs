@@ -27,3 +27,9 @@ pub use crate::decrypt::mac::decrypt;
 mod rc4;
 #[cfg(feature = "decrypt_rc4")]
 pub use crate::decrypt::rc4::decrypt;
+
+// AES 解密
+#[cfg(feature = "decrypt_aes")]
+mod aes;
+#[cfg(feature = "decrypt_aes")]
+pub use crate::decrypt::aes::decrypt;
