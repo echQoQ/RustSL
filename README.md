@@ -374,3 +374,10 @@ cargo build --release --no-default-features \
 - **重构构建系统**：
   - 将 `target.rs` 生成逻辑从GUI移至 `build.rs`，通过feature环境变量控制
   - 将 `icon.rc` 生成逻辑从GUI移至 `build.rs`，通过环境变量控制
+- **新增MapViewOfFile内存分配方式**：
+  - 在 `src/alloc_mem/mapview.rs` 中实现 `MapViewOfFile` 内存分配。
+- **新增HeapAlloc内存分配方式**：
+  - 在 `src/alloc_mem/heapalloc.rs` 中实现 `HeapAlloc` 内存分配。
+- **新增XchaCha20加密方式**：
+  - 在 `encrypt_lib/xchacha20.py` 中实现XChaCha20加密插件。
+  - 在 `src/decrypt/xchacha20.rs` 中实现对应的解密模块。
