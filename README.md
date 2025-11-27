@@ -141,6 +141,8 @@ pip install -r requirements.txt
    ```bash
    cargo +nightly --version
    ```
+4. **MSVC 编译环境**
+   - 确保已安装 Visual Studio，并包含 "使用 C++ 的桌面开发" 工作负载，以提供必要的编译工具链。
 
 ##### Linux / macOS:
 1. **安装 Rustup**
