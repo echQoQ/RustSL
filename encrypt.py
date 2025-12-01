@@ -4,9 +4,8 @@ import base64
 import argparse
 import importlib.util
 import sys
+import binascii
 from pathlib import Path
-
-import base64
 
 
 def read_binary_file(file_path):
@@ -66,7 +65,7 @@ def build_base_parser(plugin_names):
     default = plugin_names[0] if plugin_names else None
     p.add_argument("-m", "--method", default=default, choices=plugin_names,
                    help="encryption method / plugin to use")
-    p.add_argument("-e", "--encode", default="base64", choices=["base64", "base32", "none"],
+    p.add_argument("-e", "--encode", default="base64", choices=["base64", "base32", "hex", "none"],
                    help="encoding method for output (default base64)")
     return p
 
@@ -113,6 +112,8 @@ def main():
         final = base64.b64encode(final)
     elif args.encode == "base32":
         final = base64.b32encode(final)
+    elif args.encode == "hex":
+        final = binascii.hexlify(final)
     elif args.encode == "none":
         pass  # final remains as bytes
 

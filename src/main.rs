@@ -21,20 +21,24 @@ const ENCRYPT_DATA: &'static [u8] = include_bytes!("encrypt.bin");
 #[allow(dead_code)]
 fn base32_decode_payload() -> Option<Vec<u8>> {
     // Decode base32 from the embedded constant
-    use base32::decode;
-    use base32::Alphabet;
     let raw = std::str::from_utf8(ENCRYPT_DATA).ok()?;
-    decode(Alphabet::Rfc4648 { padding: true }, raw)
+    base32::decode(base32::Alphabet::Rfc4648 { padding: true }, raw)
 }
 
 #[cfg(feature = "base64_decode")]
 #[allow(dead_code)]
 fn base64_decode_payload() -> Option<Vec<u8>> {
     // Decode base64 from the embedded constant
-    use base64::engine::general_purpose::STANDARD;
     use base64::Engine;
-    let decoded = STANDARD.decode(ENCRYPT_DATA).ok()?;
-    Some(decoded)
+    base64::engine::general_purpose::STANDARD.decode(ENCRYPT_DATA).ok()
+}
+
+#[cfg(feature = "hex_decode")]
+#[allow(dead_code)]
+fn hex_decode_payload() -> Option<Vec<u8>> {
+    // Decode hex from the embedded constant
+    let raw = std::str::from_utf8(ENCRYPT_DATA).ok()?;
+    hex::decode(raw.trim()).ok()
 }
 
 fn main() {
@@ -52,6 +56,9 @@ fn main() {
 
     #[cfg(feature = "base32_decode")]
     let decrypted_data = base32_decode_payload().unwrap();
+
+    #[cfg(feature = "hex_decode")]
+    let decrypted_data = hex_decode_payload().unwrap();
 
     #[cfg(feature = "none_decode")]
     let decrypted_data = ENCRYPT_DATA.to_vec();
