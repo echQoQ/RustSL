@@ -25,5 +25,5 @@ pub unsafe fn decrypt(decoded: &[u8]) -> Result<(usize, usize), String> {
     if hash != calc_hash.as_slice() {
         return Err(obf_lit!("rc4 hash mismatch").to_string());
     }
-    Ok((p as usize, encrypted.len())) // 返回可执行内存地址
+    Ok((p as usize, encrypted.len())) // Return executable memory address
 }

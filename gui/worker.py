@@ -15,6 +15,7 @@ from .config_manager import (
     get_encryption_feature_map,
     get_run_mode_map,
     get_alloc_mem_feature_map,
+    get_encoding_feature_map,
     get_default_value
 )
 
@@ -148,13 +149,13 @@ class WorkerThread(QThread):
         features.append(enc_feature)
         
         # 编码方式feature (解码对应)
-        encode_method = self.params.get('encode_method', 'base64')
-        if encode_method == 'base64':
-            features.append('base64_decode')
-        elif encode_method == 'base32':
-            features.append('base32_decode')
-        elif encode_method == 'none':
-            features.append('none_decode')
+        encoding_feature_map = get_encoding_feature_map()
+        default_encoding = get_default_value('encoding') or 'base64'
+        encoding_feature = encoding_feature_map.get(
+            self.params.get('encode_method', default_encoding),
+            'base64_decode'
+        )
+        features.append(encoding_feature)
         
         # 运行模式feature
         run_map = get_run_mode_map()

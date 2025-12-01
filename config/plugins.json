@@ -28,9 +28,17 @@
     { "id": "desktop_files", "label": "桌面文件", "feature": "vm_check_desktop_files" },
     { "id": "c_drive", "label": "C盘容量", "feature": "vm_check_c_drive" }
   ],
+  "encodings": [
+    { "id": "base64", "label": "Base64", "feature": "base64_decode" },
+    { "id": "base32", "label": "Base32", "feature": "base32_decode" },
+    { "id": "hex", "label": "Hex", "feature": "hex_decode" },
+    { "id": "urlsafe_base64", "label": "UrlSafe Base64", "feature": "urlsafe_base64_decode" },
+    { "id": "none", "label": "无编码", "feature": "none_decode" }
+  ],
   "defaults": {
     "encryption": "ipv4",
     "run_mode": "create_thread",
-    "alloc_mem_mode": "alloc_mem_va"
+    "alloc_mem_mode": "alloc_mem_va",
+    "encoding": "base64"
   }
 }

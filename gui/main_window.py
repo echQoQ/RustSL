@@ -14,7 +14,7 @@ from .widgets import BinComboBox, IcoComboBox
 from .sign import SignAppComboBox
 from .worker import WorkerThread
 from .styles import get_main_stylesheet
-from .config_manager import load_plugins_manifest, get_default_value
+from .config_manager import load_plugins_manifest, get_default_value, get_encodings
 from .ui_components import (
     get_folder_icon,
     create_encryption_combobox,
@@ -101,8 +101,14 @@ class LoaderGUI(QWidget):
         enc_layout = QHBoxLayout()
         self.enc_box = create_encryption_combobox()
         self.encode_box = QComboBox()
-        self.encode_box.addItems(['base64', 'base32', 'none'])
-        self.encode_box.setCurrentText('base64')  # 默认base64
+        encodings = get_encodings()
+        for enc in encodings:
+            self.encode_box.addItem(enc['label'], enc['id'])
+        default_encoding = get_default_value('encoding') or 'base64'
+        for i in range(self.encode_box.count()):
+            if self.encode_box.itemData(i) == default_encoding:
+                self.encode_box.setCurrentIndex(i)
+                break
         enc_layout.addWidget(self.enc_box, 8)
         enc_layout.addWidget(self.encode_box, 2)
         enc_group.setLayout(enc_layout)
@@ -269,7 +275,7 @@ class LoaderGUI(QWidget):
         
         enc_method = self.enc_box.itemData(self.enc_box.currentIndex()) or self.enc_box.currentText()
         
-        encode_method = self.encode_box.currentText()
+        encode_method = self.encode_box.currentData() or self.encode_box.currentText()
         
         icon_path = self.ico_box.itemData(self.ico_box.currentIndex())
         if not icon_path:

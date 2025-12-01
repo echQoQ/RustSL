@@ -1,40 +1,40 @@
-// IPv4 解密
+// IPv4 decryption
 #[cfg(feature = "decrypt_ipv4")]
 mod ipv4;
 #[cfg(feature = "decrypt_ipv4")]
 pub use crate::decrypt::ipv4::decrypt;
 
-// IPv6 解密
+// IPv6 decryption
 #[cfg(feature = "decrypt_ipv6")]
 mod ipv6;
 #[cfg(feature = "decrypt_ipv6")]
 pub use crate::decrypt::ipv6::decrypt;
 
-// UUID 解密
+// UUID decryption
 #[cfg(feature = "decrypt_uuid")]
 mod uuid;
 #[cfg(feature = "decrypt_uuid")]
 pub use crate::decrypt::uuid::decrypt;
 
-// MAC 解密
+// MAC decryption
 #[cfg(feature = "decrypt_mac")]
 mod mac;
 #[cfg(feature = "decrypt_mac")]
 pub use crate::decrypt::mac::decrypt;
 
-// RC4 解密
+// RC4 decryption
 #[cfg(feature = "decrypt_rc4")]
 mod rc4;
 #[cfg(feature = "decrypt_rc4")]
 pub use crate::decrypt::rc4::decrypt;
 
-// AES 解密
+// AES decryption
 #[cfg(feature = "decrypt_aes")]
 mod aes;
 #[cfg(feature = "decrypt_aes")]
 pub use crate::decrypt::aes::decrypt;
 
-// XChaCha20 解密
+// XChaCha20 decryption
 #[cfg(feature = "decrypt_xchacha20")]
 mod xchacha20;
 #[cfg(feature = "decrypt_xchacha20")]

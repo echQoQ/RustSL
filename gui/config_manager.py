@@ -19,6 +19,7 @@ def load_plugins_manifest():
     runm = data.get('run_modes') or []
     vmc = data.get('vm_checks') or []
     alloc_mem_modes = data.get('alloc_mem_modes') or []
+    encodings = data.get('encodings') or []
     defaults = data.get('defaults') or {}
     
     if not enc or not runm:
@@ -29,6 +30,7 @@ def load_plugins_manifest():
         'run_modes': runm,
         'vm_checks': vmc,
         'alloc_mem_modes': alloc_mem_modes,
+        'encodings': encodings,
         'defaults': defaults,
     }
 
@@ -61,6 +63,18 @@ def get_alloc_mem_feature_map():
     """获取内存分配方式的 ID 到 feature 的映射"""
     manifest = load_plugins_manifest()
     return {m['id']: m['feature'] for m in manifest.get('alloc_mem_modes', [])}
+
+
+def get_encodings():
+    """获取编码方式列表"""
+    manifest = load_plugins_manifest()
+    return manifest.get('encodings', [])
+
+
+def get_encoding_feature_map():
+    """获取编码方式的 ID 到 feature 的映射"""
+    manifest = load_plugins_manifest()
+    return {e['id']: e['feature'] for e in manifest.get('encodings', [])}
 
 
 def get_default_value(key):

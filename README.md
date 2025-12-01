@@ -387,3 +387,9 @@ set "RSL_ICON_PATH=icons\avp_0000.ico" && cargo build --release --no-default-fea
   - 在 `encrypt_lib/xchacha20.py` 中实现XChaCha20加密插件。
   - 在 `src/decrypt/xchacha20.rs` 中实现对应的解密模块。
 - **将加解密与编解码解耦，可以组合出更多可能性**
+
+### 2025-12-01
+- **优化编码方式拓展方式**
+  - 将GUI中读取编码方式的逻辑改为从配置文件读取，方便拓展和维护
+  - 新增 hex 编码方式
+  - 新增 urlsafe_base64 编码方式

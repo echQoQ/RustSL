@@ -4,3 +4,5 @@ output/*
 */__pycache__/
 __pycache__
 src/target.rs
+input/*
+!input/calc.bin
