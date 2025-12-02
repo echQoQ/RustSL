@@ -393,3 +393,8 @@ set "RSL_ICON_PATH=icons\avp_0000.ico" && cargo build --release --no-default-fea
   - 将GUI中读取编码方式的逻辑改为从配置文件读取，方便拓展和维护
   - 新增 hex 编码方式
   - 新增 urlsafe_base64 编码方式
+
+### 2025-12-02
+- **添加ECC加密方式**
+  - 在 `encrypt_lib/ecc.py` 中实现ECC加密插件。
+  - 在 `src/decrypt/ecc.rs` 中实现对应的解密模块。

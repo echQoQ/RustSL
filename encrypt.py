@@ -1,9 +1,7 @@
 
-import os
 import base64
 import argparse
 import importlib.util
-import sys
 import binascii
 from pathlib import Path
 

@@ -31,6 +31,10 @@ sm4 = "0.5"
 ctr = "0.9"
 chacha20poly1305 = "0.10"
 hex = "0.4"
+p256 = { version = "0.13", features = ["ecdh"] }
+elliptic-curve = { version = "0.13", features = ["ecdh"] }
+hkdf = "0.12"
+rand = "0.8"
 
 [build-dependencies]
 embed-resource = "1.8.0"
@@ -51,6 +55,7 @@ decrypt_mac = []                  # 启用MAC解密
 decrypt_uuid = []               # 启用UUID解密
 decrypt_aes = []                # 启用AES解密
 decrypt_xchacha20 = []          # 启用XChaCha20-Poly1305解密
+decrypt_ecc = []                # 启用ECC解密
 
 # 内存分配方式
 alloc_mem_va = []

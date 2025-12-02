@@ -31,7 +31,6 @@ pub unsafe fn decrypt(decoded: &[u8]) -> Result<(usize, usize), String> {
         .map_err(|_| obf_lit!("aes decryption failed").to_string())?
         .len();
     
-    // Calculate hash of decrypted data
     let mut hasher = Sha256::new();
     hasher.update(&buf[..pt_len]);
     let calc_hash = hasher.finalize();

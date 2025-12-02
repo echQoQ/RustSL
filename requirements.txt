@@ -3,3 +3,4 @@ PyQt5>=5.15.0
 
 # 加密库依赖
 pycryptodome>=3.15.0
+cryptography>=3.4.0

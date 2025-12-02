@@ -1,12 +1,4 @@
-"""
-UI样式模块
-提供统一的QSS样式表和主题配置
-"""
-
 def get_main_stylesheet():
-    """
-    获取主窗口的QSS样式表
-    """
     return """
     QWidget {
         background: #f7f7f7;

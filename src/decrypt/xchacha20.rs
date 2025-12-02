@@ -5,7 +5,6 @@ pub unsafe fn decrypt(decoded: &[u8]) -> Result<(usize, usize), String> {
     use chacha20poly1305::{XChaCha20Poly1305, Key, XNonce};
     use chacha20poly1305::aead::{AeadInPlace, KeyInit};
 
-    // Payload structure: [Key(32)] [Nonce(24)] [Tag(16)] [Ciphertext...]
     let key_len = 32;
     let nonce_len = 24;
     let tag_len = 16;
@@ -20,7 +19,6 @@ pub unsafe fn decrypt(decoded: &[u8]) -> Result<(usize, usize), String> {
     let ciphertext = &decoded[key_len + nonce_len + tag_len..];
 
     let p = unsafe { alloc_mem(ciphertext.len())? };
-    // Copy ciphertext to allocated memory
     std::ptr::copy_nonoverlapping(ciphertext.as_ptr(), p, ciphertext.len());
     
     let buf = std::slice::from_raw_parts_mut(p, ciphertext.len());

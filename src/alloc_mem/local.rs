@@ -10,7 +10,6 @@ pub unsafe fn alloc_mem(size: usize) -> Result<*mut u8, String> {
     let local_alloc: LocalAllocFn = core::mem::transmute(get_proc_address(kernel32, obf_lit_bytes!(b"LocalAlloc\0").as_slice())?);
     let virtual_protect: VirtualProtectFn = core::mem::transmute(get_proc_address(kernel32, obf_lit_bytes!(b"VirtualProtect\0").as_slice())?);
 
-    // LMEM_FIXED | LMEM_ZEROINIT = 0x0000 | 0x0040 = 0x0040
     let p = local_alloc(0x0040, size);
     if p.is_null() {
         return Err(obf_lit!("LocalAlloc failed").to_string());

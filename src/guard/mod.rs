@@ -1,7 +1,6 @@
 #[cfg(feature = "sandbox")]
 use std::process;
 
-// VM检测模块
 #[cfg(feature = "vm_check_tick")]
 mod tick;
 #[cfg(feature = "vm_check_tick")]
@@ -26,7 +25,6 @@ pub use crate::guard::c_drive::is_c_drive_total_over;
 
 #[cfg(feature = "sandbox")]
 pub fn guard_vm() {
-    // 固定检测参数
     #[cfg(feature = "vm_check_c_drive")]
     let c_min_gb: u64 = 50;
     #[cfg(feature = "vm_check_desktop_files")]

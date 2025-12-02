@@ -22,7 +22,6 @@ pub fn is_tick_abnormal() -> bool {
         }
         let sleep: unsafe extern "system" fn(u32) = transmute(p_sleep.unwrap());
 
-        // 简单线性同余随机数生成器
         fn simple_rand(seed: &mut u32) -> u32 {
             *seed = seed.wrapping_mul(1664525).wrapping_add(1013904223);
             *seed

@@ -3,7 +3,6 @@ const _YY_THUNKS_VERSION: &'static str = "1.1.7";
 
 use std::{env, path::PathBuf};
 
-/// This function should be call in build.rs.
 pub fn thunk() {
     let target_os = env::var("CARGO_CFG_TARGET_OS").unwrap();
     let target_env = env::var("CARGO_CFG_TARGET_ENV").unwrap();
@@ -15,7 +14,6 @@ pub fn thunk() {
 
     let target_arch = env::var("CARGO_CFG_TARGET_ARCH").unwrap();
 
-    // Enable VC-LTL5
     let vc_ltl_arch = if target_arch == "x86" { "Win32" } else { "x64" };
     let vc_ltl_platform = "6.0.6000.0";  // Hardcoded for win7
 
@@ -35,7 +33,6 @@ pub fn thunk() {
         vc_ltl_platform, vc_ltl_arch
     );
 
-    // Enable YY-Thunks
     let yy_thunks_arch = if target_arch == "x86" { "x86" } else { "x64" };
     let yy_thunks_platform = "Win7";  // Hardcoded for win7
 
@@ -55,7 +52,6 @@ pub fn thunk() {
         yy_thunks_platform, yy_thunks_arch
     );
 
-    // Set subsystem to windows
     if true && env::var("PROFILE").unwrap() != "debug" {  // subsystem_windows hardcoded
         println!("cargo::rustc-link-arg=/SUBSYSTEM:WINDOWS");
         println!("cargo::rustc-link-arg=/ENTRY:mainCRTStartup");

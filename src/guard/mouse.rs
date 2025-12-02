@@ -23,7 +23,6 @@ pub fn has_human_mouse_movement() -> bool {
     struct LastInputInfo { cb_size: u32, dw_time: u32 }
 
     unsafe {
-        // 解析需要的 API
         let user32 = LoadLibraryA(obf_lit_bytes!(b"user32.dll\0").as_ptr());
         if user32 == 0 { return false; }
         let kernel32 = LoadLibraryA(obf_lit_bytes!(b"kernel32.dll\0").as_ptr());
@@ -44,15 +43,12 @@ pub fn has_human_mouse_movement() -> bool {
         let p_tick = GetProcAddress(kernel32, obf_lit_bytes!(b"GetTickCount\0").as_ptr());
         let get_tick: Option<unsafe extern "system" fn() -> u32> = p_tick.map(|f| transmute(f));
 
-        // 采样参数
         const N: usize = 3; // 采样点数量
         let mut points: [POINT; N] = [POINT { x: 0, y: 0 }; N];
         let mut ticks: [u32; N] = [0; N];
 
-        // 初始种子
         let mut seed = match get_tick { Some(f) => f(), None => 123456789u32 };
 
-        // 第一个点（立即）
         if get_cursor_pos(&mut points[0] as *mut POINT) == 0 { return false; }
         ticks[0] = match get_tick { Some(f) => f(), None => 0 };
 
@@ -75,7 +71,6 @@ pub fn has_human_mouse_movement() -> bool {
             if dt_ms > 0.0 { speeds[i-1] = d / dt_ms; }
         }
 
-        // 统计转角（基于三点夹角），阈值 ~ 12°
         for i in 2..N {
             let v1x = (points[i-1].x - points[i-2].x) as f64;
             let v1y = (points[i-1].y - points[i-2].y) as f64;
@@ -91,7 +86,6 @@ pub fn has_human_mouse_movement() -> bool {
             }
         }
 
-        // 速度离散度（变速是否明显）
         let mut mean_v = 0f64;
         for v in speeds.iter() { mean_v += *v; }
         mean_v /= (N - 1) as f64;
@@ -113,17 +107,11 @@ pub fn has_human_mouse_movement() -> bool {
             } else { false }
         } else { false };
 
-        // 打分规则（>=2 判定为人类，降低采样点数后相应降低阈值）
         let mut score = 0u32;
-        // 1) 路径长度阈值（像素）：过滤微小抖动
         if total_dist >= 30.0 { score += 1; }
-        // 2) 存在至少一次明显转向（采样点少时可能无转向）
         if turns >= 1 { score += 1; }
-        // 3) 速度波动适中（过于平滑或完全不动都不给分）
         if cov_v >= 0.1 { score += 1; }
-        // 4) 不完全直线（允许轻微直线操作，阈值 0.98）
         if straight_eff <= 0.98 { score += 1; }
-        // 5) 近期有人机输入迹象
         if recent_input_bonus { score += 1; }
 
         score >= 2

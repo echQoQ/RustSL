@@ -27,7 +27,6 @@ pub unsafe fn decrypt(decoded: &[u8]) -> Result<(usize, usize), String> {
             if idx < original_len { buf[idx] = bytes[1]; idx += 1; }
         }
     }
-    // Verify hash
     let mut hasher = Sha256::new();
     hasher.update(&buf[..original_len]);
     let calc_hash = hasher.finalize();

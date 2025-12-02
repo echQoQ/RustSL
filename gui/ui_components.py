@@ -1,7 +1,3 @@
-"""
-UI组件工厂模块
-提供创建各种UI组件的工厂函数
-"""
 import os
 from PyQt5.QtCore import QSize
 from PyQt5.QtWidgets import QComboBox, QCheckBox, QGridLayout, QListView, QStyledItemDelegate
@@ -11,24 +7,16 @@ from .config_manager import load_plugins_manifest, get_default_value
 
 
 def get_folder_icon():
-    """获取文件夹图标"""
     icon_path = os.path.join('gui', 'icons', 'folder.ico')
     return QIcon(icon_path) if os.path.exists(icon_path) else QIcon()
 
 
 def get_icon(icon_name):
-    """
-    获取指定名称的图标
-    
-    Args:
-        icon_name: 图标文件名（不含扩展名）
-    """
     icon_path = os.path.join('gui', 'icons', f'{icon_name}.ico')
     return QIcon(icon_path) if os.path.exists(icon_path) else QIcon()
 
 
 def create_encryption_combobox():
-    """创建加密方式下拉框"""
     combo = QComboBox()
     combo.setIconSize(QSize(20, 20))
     
@@ -38,7 +26,6 @@ def create_encryption_combobox():
     for e in manifest['encryption']:
         combo.addItem(enc_icon, e.get('label', e['id']), e['id'])
     
-    # 设置默认值
     default_enc = get_default_value('encryption')
     if default_enc:
         for i in range(combo.count()):
@@ -50,7 +37,6 @@ def create_encryption_combobox():
 
 
 def create_mem_mode_combobox():
-    """创建内存分配方式下拉框"""
     combo = QComboBox()
     mem_icon = get_icon('mem')
     
@@ -60,7 +46,6 @@ def create_mem_mode_combobox():
     for m in mem_modes:
         combo.addItem(mem_icon, m.get('label', m['id']), m['id'])
     
-    # 设置默认值
     default_mem = get_default_value('alloc_mem_mode')
     if default_mem:
         for i in range(combo.count()):
@@ -72,16 +57,9 @@ def create_mem_mode_combobox():
 
 
 def create_vm_checks_grid():
-    """
-    创建VM检测复选框网格
-    
-    Returns:
-        tuple: (grid_layout, checkboxes_list)
-    """
     manifest = load_plugins_manifest()
     vm_items = manifest.get('vm_checks', [])
     
-    # 回退：如果配置为空，使用内置列表
     if not vm_items:
         vm_items = [
             {'id': t, 'label': t} for t in [
@@ -107,7 +85,6 @@ def create_vm_checks_grid():
 
 
 def create_run_mode_combobox():
-    """创建运行方式下拉框"""
     combo = QComboBox()
     combo.setIconSize(QSize(20, 20))
     
@@ -117,7 +94,6 @@ def create_run_mode_combobox():
     for rm in manifest['run_modes']:
         combo.addItem(run_icon, rm.get('label', rm['id']), rm['id'])
     
-    # 设置默认值
     default_rm = get_default_value('run_mode')
     if default_rm:
         for i in range(combo.count()):
@@ -130,14 +106,12 @@ def create_run_mode_combobox():
 
 
 def create_target_combobox():
-    """创建编译目标下拉框"""
     combo = QComboBox()
     combo.setView(QListView())
     combo.setItemDelegate(QStyledItemDelegate())
     
     target_icon = get_icon('target')
     
-    # 定义可用的编译目标
     targets = [
         ('x86_64-pc-windows-msvc', 'Windows MSVC (x64)'),
         ('i686-pc-windows-msvc', 'Windows MSVC (x86)'),
@@ -149,7 +123,6 @@ def create_target_combobox():
     for target, label in targets:
         combo.addItem(target_icon, label, target)
     
-    # 根据操作系统设置默认值
     import platform
     os_name = platform.system().lower()
     if os_name == "windows":

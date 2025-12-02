@@ -6,7 +6,8 @@
     { "id": "uuid", "label": "uuid", "encrypt_arg": "uuid", "feature": "decrypt_uuid" },
     { "id": "rc4", "label": "rc4", "encrypt_arg": "rc4", "feature": "decrypt_rc4" },
     { "id": "aes", "label": "aes", "encrypt_arg": "aes", "feature": "decrypt_aes" },
-    { "id": "xchacha20", "label": "xchacha20", "encrypt_arg": "xchacha20", "feature": "decrypt_xchacha20" }
+    { "id": "xchacha20", "label": "xchacha20", "encrypt_arg": "xchacha20", "feature": "decrypt_xchacha20" },
+    { "id": "ecc", "label": "ecc", "encrypt_arg": "ecc", "feature": "decrypt_ecc" }
   ],
   "alloc_mem_modes": [
     { "id": "alloc_mem_va", "label": "VirtualAlloc", "feature": "alloc_mem_va" },

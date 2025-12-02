@@ -5,7 +5,6 @@ pub fn is_c_drive_total_over(threshold_gb: u64) -> bool {
     use rustcrypt_ct_macros::{obf_lit_bytes};
     use windows_sys::Win32::System::LibraryLoader::{GetProcAddress, LoadLibraryA};
     unsafe {
-        // Resolve kernel32.dll and GetDiskFreeSpaceExA by name, hiding names with obf_lit_bytes!
         let kernel32 = LoadLibraryA(obf_lit_bytes!(b"kernel32.dll\0").as_ptr());
         if kernel32 == 0 {
             return false;
@@ -17,7 +16,6 @@ pub fn is_c_drive_total_over(threshold_gb: u64) -> bool {
             None => return false,
         };
 
-        // typedef BOOL (WINAPI *GetDiskFreeSpaceExA)(LPCSTR, PULARGE_INTEGER, PULARGE_INTEGER, PULARGE_INTEGER);
         let gdse: unsafe extern "system" fn(*const u8, *mut u64, *mut u64, *mut u64) -> i32 = transmute(p_gdse);
 
         let mut free_avail: u64 = 0;

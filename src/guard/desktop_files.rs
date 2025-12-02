@@ -2,7 +2,6 @@
 #[allow(dead_code)]
 pub fn check_desktop_files(threshold: usize) -> bool {
     use std::fs;
-    // 获取桌面路径
     let desktop_path = match get_desktop_path() {
         Some(path) => path,
         None => return false,
@@ -15,7 +14,6 @@ pub fn check_desktop_files(threshold: usize) -> bool {
 
     let file_count = entries.filter_map(|entry| entry.ok()).count();
 
-    // 检查文件数量是否小于阈值
     file_count >= threshold
 }
 
