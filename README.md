@@ -41,6 +41,8 @@
 - **MAC** - 将 Shellcode 转换为 MAC 地址格式
 - **UUID** - 将 Shellcode 转换为 UUID 格式
 - **AES** - 高级加密标准(AES-256-CBC)
+- **XChaCha20** - 扩展版 ChaCha20加密
+- **ECC** - 椭圆曲线加密
 - 可拓展...
 
 ### 💾 内存分配
@@ -49,6 +51,10 @@
 - **LocalAlloc** - 使用本地内存分配函数
 - **HeapAlloc** - 使用堆内存分配函数
 - **MemoryMappedFile** - 使用内存映射文件分配内存
+- **Section Allocation** - 使用 NtCreateSection 和 NtMapViewOfSection API 分配内存
+- **Shared Allocation** - 使用 SHGetMalloc 分配共享内存
+- **SNMP Utility Allocation** - 使用 SnmpUtilMemAlloc 分配内存
+- **VA from Application** - 使用 VirtualAllocFromApp 分配内存
 - 可拓展...
 
 ### 🛡️ VM/沙箱检测
@@ -56,6 +62,10 @@
 - **鼠标轨迹检测** - 通过多点轨迹特征判断真实鼠标活动
 - **桌面文件检测** - 检查桌面文件数量以识别虚拟环境
 - **C盘容量检测** - 检查 C 盘剩余容量以识别虚拟环境
+- **RDTSC 检测** - 使用 RDTSC 指令检测时间加速
+- **CPU 信息检测** - 检查 CPU 型号和核心数
+- **USB 设备检测** - 检查 USB 设备历史
+- **开机时间检测** - 检查系统开机时间
 - 可拓展...
 
 ### 🚀 运行模式
@@ -64,6 +74,10 @@
 - **EnumUILanguagesW 回调执行** - 通过回调函数执行 Shellcode
 - **Early Bird APC 注入** - 利用 APC 机制进行注入
 - **CreateRemoteThread 远程注入** - 通过远程线程创建执行 Shellcode
+- **APC 注入** - 使用 QueueUserAPC 进行异步过程调用注入
+- **Fiber 注入** - 利用 Fiber 机制执行 Shellcode
+- **FLS Alloc 注入** - 使用 FLS 分配进行注入
+- **LineDDA 注入** - 利用 LineDDA 回调执行 Shellcode
 - 可拓展...
 
 ## 📦 项目结构
@@ -353,7 +367,7 @@ set "RSL_ICON_PATH=icons\avp_0000.ico" && cargo build --release --no-default-fea
 
 ### 2025-11-22
 - **重构加密模块**：将 `encrypt.py` 重构为插件化架构，支持动态加载加密插件。
-- **新增插件目录**：添加 `encrypt_lib/` 目录，包含示例插件（ipv4, ipv6, mac, uuid, rc4）。
+- **新增插件目录**：添加 `encrypt_lib/` 目录。
 - **重构decrypt模块**：将具体解密函数拆分到子文件中
 - **重构并新增alloc_mem模块**：新增alloc_mem_global和alloc_mem_local实现内存分配
 - **重构并新增exec模块**：新增EnumUILanguagesW 回调注入和GDI 家族变种注入
