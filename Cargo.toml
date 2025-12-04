@@ -75,15 +75,14 @@ pattern3 = []
 run_enum_ui = ["pattern1"]                # UI线程枚举注入
 run_create_thread = ["pattern1"]          # CreateThread注入
 run_gdi_families = ["pattern1"]           # GDI家族注入
+run_apc = ["pattern1"]                    # APC 注入
+run_fiber = ["pattern1"]                  # Fiber 注入
+run_fls_alloc = ["pattern1"]              # FLS Alloc 注入
+run_linedda = ["pattern1"]                # LineDDA 注入
 
 run_early_bird_apc = ["pattern2"]         # Early Bird APC 注入
 
 run_create_remote_thread = ["pattern3"]    # CreateRemoteThread 远程注入
-
-run_apc = ["pattern2"]                    # APC 注入
-run_fiber = ["pattern1"]                  # Fiber 注入
-run_fls_alloc = ["pattern1"]              # FLS Alloc 注入
-run_linedda = ["pattern1"]                # LineDDA 注入
 
 with_forgery = []               # 启用伪造特性
 
