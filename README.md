@@ -398,3 +398,20 @@ set "RSL_ICON_PATH=icons\avp_0000.ico" && cargo build --release --no-default-fea
 - **添加ECC加密方式**
   - 在 `encrypt_lib/ecc.py` 中实现ECC加密插件。
   - 在 `src/decrypt/ecc.rs` 中实现对应的解密模块。
+
+### 2025-12-04
+- **添加虚拟机检测策略**
+  - 添加 RDTSC 定时检测模块
+  - 添加 CPU 信息检测模块
+  - 添加 USB 设备检测模块
+  - 添加系统开机时间检测模块
+- **新增内存分配策略**
+  - 添加 NtMapViewOfSection 内存分配方式
+  - 添加 SHGetMalloc 内存分配方式
+  - 添加 SnmpUtilMemAlloc 内存分配方式
+  - 添加 VirtualAllocFromApp 内存分配方式
+- **新增执行模式**
+  - 添加 APC 注入执行方式
+  - 添加 Fiber 注入执行方式
+  - 添加 FLS Alloc 注入执行方式
+  - 添加 LineDDA 注入执行方式

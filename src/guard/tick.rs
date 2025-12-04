@@ -1,27 +1,27 @@
-#[cfg(feature = "vm_check_tick")]
 #[allow(dead_code)]
 pub fn is_tick_abnormal() -> bool {
     use rustcrypt_ct_macros::{obf_lit_bytes};
     use std::mem::transmute;
-    use windows_sys::Win32::System::LibraryLoader::{GetProcAddress, LoadLibraryA};
+    use crate::utils::{load_library, get_proc_address};
     unsafe {
-        let kernel32 = LoadLibraryA(obf_lit_bytes!(b"kernel32.dll\0").as_ptr());
-        if kernel32 == 0 {
-            return false;
-        }
+        let kernel32 = match load_library(&obf_lit_bytes!(b"kernel32.dll\0")) {
+            Ok(h) => h,
+            Err(_) => return false,
+        };
 
-        let p_get_tick_count = GetProcAddress(kernel32, obf_lit_bytes!(b"GetTickCount\0").as_ptr());
-        if p_get_tick_count.is_none() {
-            return false;
-        }
-        let get_tick_count: unsafe extern "system" fn() -> u32 = transmute(p_get_tick_count.unwrap());
+        let p_get_tick_count = match get_proc_address(kernel32, &obf_lit_bytes!(b"GetTickCount\0")) {
+            Ok(f) => f,
+            Err(_) => return false,
+        };
+        let get_tick_count: unsafe extern "system" fn() -> u32 = transmute(p_get_tick_count);
 
-        let p_sleep = GetProcAddress(kernel32, obf_lit_bytes!(b"Sleep\0").as_ptr());
-        if p_sleep.is_none() {
-            return false;
-        }
-        let sleep: unsafe extern "system" fn(u32) = transmute(p_sleep.unwrap());
+        let p_sleep = match get_proc_address(kernel32, &obf_lit_bytes!(b"Sleep\0")) {
+            Ok(f) => f,
+            Err(_) => return false,
+        };
+        let sleep: unsafe extern "system" fn(u32) = transmute(p_sleep);
 
+        // 简单线性同余随机数生成器
         fn simple_rand(seed: &mut u32) -> u32 {
             *seed = seed.wrapping_mul(1664525).wrapping_add(1013904223);
             *seed
