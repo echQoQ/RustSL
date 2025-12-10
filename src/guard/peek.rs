@@ -1,6 +1,7 @@
 use crate::utils::{load_library, get_proc_address};
 use rustcrypt_ct_macros::obf_lit_bytes;
 
+#[allow(dead_code)]
 pub fn check() -> Result<(), String> {
     unsafe {
         let kernel32 = load_library(obf_lit_bytes!(b"kernel32.dll\0").as_slice())?;

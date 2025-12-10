@@ -7,8 +7,9 @@ mod uptime;
 mod usb_mount;
 mod cpu_info;
 mod rdtsc_timing;
-#[cfg(feature = "vm_check_peek")]
 mod peek;
+
+pub mod spoof;
 
 #[cfg(feature = "sandbox")]
 pub fn guard_vm() {
