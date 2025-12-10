@@ -442,7 +442,7 @@ set "RSL_ICON_PATH=icons\avp_0000.ico" && cargo build --release --no-default-fea
 - **新增Named Pipe加载方式**：实现基于命名管道的payload加载，以绕过某些沙箱检测。
 - **更新GUI支持**：在GUI中添加"Payload 加载方式"选项，支持用户选择不同的加载策略。
 
-经过测试，Pipe加载方式在多种杀软和沙箱环境下表现良好，显著提升了免杀效果。最新的微步沙箱检测如下：
+经过测试，Pipe加载方式提升了免杀效果。最新的微步沙箱检测如下：
 ![alt text](static/12-10-1.png)
 上线CS：
 ![alt text](static/12-10-2.png)
