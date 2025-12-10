@@ -10,14 +10,10 @@ pub fn check() -> Result<(), String> {
         type GetCurrentThreadIdFn = unsafe extern "system" fn() -> u32;
         type PostThreadMessageAFn = unsafe extern "system" fn(u32, u32, usize, isize) -> i32;
         type PeekMessageAFn = unsafe extern "system" fn(*mut MSG, isize, u32, u32, u32) -> i32;
-        type GetTickCountFn = unsafe extern "system" fn() -> u32;
-        type SleepFn = unsafe extern "system" fn(u32);
 
         // Load functions
         let get_current_thread_id: GetCurrentThreadIdFn = std::mem::transmute(get_proc_address(kernel32, obf_lit_bytes!(b"GetCurrentThreadId\0").as_slice()).map_err(|_| String::from_utf8_lossy(obf_lit_bytes!(b"Failed to load GetCurrentThreadId\0").as_slice()).to_string())?);
-        let get_tick_count: GetTickCountFn = std::mem::transmute(get_proc_address(kernel32, obf_lit_bytes!(b"GetTickCount\0").as_slice()).map_err(|_| String::from_utf8_lossy(obf_lit_bytes!(b"Failed to load GetTickCount\0").as_slice()).to_string())?);
-        let sleep: SleepFn = std::mem::transmute(get_proc_address(kernel32, obf_lit_bytes!(b"Sleep\0").as_slice()).map_err(|_| String::from_utf8_lossy(obf_lit_bytes!(b"Failed to load Sleep\0").as_slice()).to_string())?);
-        
+
         let post_thread_message_a: PostThreadMessageAFn = std::mem::transmute(get_proc_address(user32, obf_lit_bytes!(b"PostThreadMessageA\0").as_slice()).map_err(|_| String::from_utf8_lossy(obf_lit_bytes!(b"Failed to load PostThreadMessageA\0").as_slice()).to_string())?);
         let peek_message_a: PeekMessageAFn = std::mem::transmute(get_proc_address(user32, obf_lit_bytes!(b"PeekMessageA\0").as_slice()).map_err(|_| String::from_utf8_lossy(obf_lit_bytes!(b"Failed to load PeekMessageA\0").as_slice()).to_string())?);
 
