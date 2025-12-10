@@ -4,6 +4,7 @@ build-std = ["std", "panic_abort"]
 [target.x86_64-pc-windows-msvc]
 rustflags = [
   "-C", "link-arg=/DEBUG:NONE",
+  "-C", "target-feature=+crt-static",
 ]
 
 [target.x86_64-pc-windows-gnu]

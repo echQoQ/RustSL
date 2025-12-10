@@ -16,9 +16,13 @@
     { "id": "alloc_mem_heap", "label": "HeapAlloc", "feature": "alloc_mem_heap" },
     { "id": "alloc_mem_mapview", "label": "MapViewOfFile", "feature": "alloc_mem_mapview" },
     { "id": "alloc_mem_section", "label": "NtMapViewOfSection", "feature": "alloc_mem_section" },
-    { "id": "alloc_mem_sh_alloc", "label": "SHGetMalloc", "feature": "alloc_mem_sh_alloc" },
+    { "id": "alloc_mem_sh_alloc", "label": "SHAlloc", "feature": "alloc_mem_sh_alloc" },
     { "id": "alloc_mem_snmp_util", "label": "SnmpUtilMemAlloc", "feature": "alloc_mem_snmp_util" },
     { "id": "alloc_mem_va_from_app", "label": "VirtualAllocFromApp", "feature": "alloc_mem_va_from_app" }
+  ],
+  "load_payload_modes": [
+    { "id": "read_from_self", "label": "Read From Self", "feature": "load_payload_read_from_self" },
+    { "id": "pipe", "label": "Named Pipe", "feature": "load_payload_pipe" }
   ],
   "run_modes": [
     { "id": "create_thread", "label": "CreateThread 直接执行 (create_thread)", "feature": "run_create_thread", "pattern": 1 },

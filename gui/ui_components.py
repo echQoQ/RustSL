@@ -56,6 +56,26 @@ def create_mem_mode_combobox():
     return combo
 
 
+def create_load_payload_combobox():
+    combo = QComboBox()
+    load_icon = get_icon('load')  # Assuming 'load.ico' exists or will fallback to empty
+    
+    manifest = load_plugins_manifest()
+    load_modes = manifest.get('load_payload_modes', [])
+    
+    for m in load_modes:
+        combo.addItem(load_icon, m.get('label', m['id']), m['id'])
+    
+    default_load = get_default_value('load_payload_mode')
+    if default_load:
+        for i in range(combo.count()):
+            if combo.itemData(i) == default_load:
+                combo.setCurrentIndex(i)
+                break
+    
+    return combo
+
+
 def create_vm_checks_grid():
     manifest = load_plugins_manifest()
     vm_items = manifest.get('vm_checks', [])

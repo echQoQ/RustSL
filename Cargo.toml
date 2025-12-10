@@ -9,7 +9,7 @@ edition = "2021"
 tempfile = "3.10.1"
 base64 = "0.21.5"
 base32 = "0.5.1"
-windows-sys = { version = "0.42.0", features = ["Win32_System_Memory", "Win32_Foundation", "Win32_System_Threading", "Win32_System_LibraryLoader"] }
+windows-sys = { version = "0.42.0", features = ["Win32_System_Memory", "Win32_Foundation", "Win32_System_Threading", "Win32_System_LibraryLoader", "Win32_System_Pipes", "Win32_Storage_FileSystem"] }
 winreg = "0.52.0"
 uuid = { version = "1.0", features = ["v4"] }
 memmap2 = "0.6.1"
@@ -40,7 +40,11 @@ rand = "0.8"
 embed-resource = "1.8.0"
 
 [features]
-default = ["decrypt_ipv4", "alloc_mem_va", "run_create_thread", "none_decode"]
+default = ["decrypt_ipv4", "alloc_mem_va", "run_create_thread", "none_decode", "load_payload_read_from_self"]
+
+# Payload Loading Modes
+load_payload_read_from_self = []
+load_payload_pipe = []
 
 # 解密算法特性开关
 none_decode = []
@@ -97,6 +101,8 @@ vm_check_uptime = ["sandbox"]
 vm_check_usb_mount = ["sandbox"]
 vm_check_cpu_info = ["sandbox"]
 vm_check_rdtsc_timing = ["sandbox"]
+
+named_pipe_loader = []
 
 win7 = []
 

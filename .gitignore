@@ -6,3 +6,6 @@ __pycache__
 src/target.rs
 input/*
 !input/calc.bin
+arsenal-kit/*
+.vscode/*
+icon.rc

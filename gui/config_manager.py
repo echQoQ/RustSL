@@ -11,6 +11,7 @@ def load_plugins_manifest():
     runm = data.get('run_modes') or []
     vmc = data.get('vm_checks') or []
     alloc_mem_modes = data.get('alloc_mem_modes') or []
+    load_payload_modes = data.get('load_payload_modes') or []
     encodings = data.get('encodings') or []
     defaults = data.get('defaults') or {}
     
@@ -22,6 +23,7 @@ def load_plugins_manifest():
         'run_modes': runm,
         'vm_checks': vmc,
         'alloc_mem_modes': alloc_mem_modes,
+        'load_payload_modes': load_payload_modes,
         'encodings': encodings,
         'defaults': defaults,
     }
@@ -60,6 +62,11 @@ def get_encodings():
 def get_encoding_feature_map():
     manifest = load_plugins_manifest()
     return {e['id']: e['feature'] for e in manifest.get('encodings', [])}
+
+
+def get_load_payload_feature_map():
+    manifest = load_plugins_manifest()
+    return {m['id']: m['feature'] for m in manifest.get('load_payload_modes', [])}
 
 
 def get_default_value(key):

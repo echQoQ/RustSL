@@ -80,6 +80,11 @@
 - **LineDDA 注入** - 利用 LineDDA 回调执行 Shellcode
 - 可拓展...
 
+### 📦 Payload加载方式(2025-12-10新增)
+- **Read From Self** - 从自身二进制文件读取payload
+- **Named Pipe** - 通过命名管道加载payload，可绕过某些沙箱检测
+- 可拓展...
+
 ## 📦 项目结构
 
 ```
@@ -428,3 +433,16 @@ set "RSL_ICON_PATH=icons\avp_0000.ico" && cargo build --release --no-default-fea
   - 添加 Fiber 注入执行方式
   - 添加 FLS Alloc 注入执行方式
   - 添加 LineDDA 注入执行方式
+
+### 2025-12-10
+
+通过学习artifact的源代码，学习了一些新的免杀技术，准备将其集成到RustSL中：
+
+- **重构Payload加载模块**：将payload加载逻辑重构为模块化架构，支持多种加载方式（Read From Self 和 Named Pipe）。
+- **新增Named Pipe加载方式**：实现基于命名管道的payload加载，以绕过某些沙箱检测。
+- **更新GUI支持**：在GUI中添加"Payload 加载方式"选项，支持用户选择不同的加载策略。
+
+经过测试，Pipe加载方式在多种杀软和沙箱环境下表现良好，显著提升了免杀效果。最新的微步沙箱检测如下：
+![alt text](static/12-10-1.png)
+上线CS：
+![alt text](static/12-10-2.png)

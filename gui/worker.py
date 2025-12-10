@@ -12,6 +12,7 @@ from .config_manager import (
     get_run_mode_map,
     get_alloc_mem_feature_map,
     get_encoding_feature_map,
+    get_load_payload_feature_map,
     get_default_value
 )
 
@@ -150,6 +151,12 @@ class WorkerThread(QThread):
         mem_mode = self.params.get('mem_mode', default_mem)
         mem_feature = mem_feature_map.get(mem_mode, 'alloc_mem_va')
         features.append(mem_feature)
+        
+        load_payload_map = get_load_payload_feature_map()
+        default_load = get_default_value('load_payload_mode') or 'read_from_self'
+        load_mode = self.params.get('load_payload_mode', default_load)
+        load_feature = load_payload_map.get(load_mode, 'load_payload_read_from_self')
+        features.append(load_feature)
         
         if self.params.get('forgery_enable'):
             features.append('with_forgery')
