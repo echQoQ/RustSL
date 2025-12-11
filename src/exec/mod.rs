@@ -40,6 +40,16 @@ mod create_thread_syscall;
 #[cfg(feature = "run_syscall")]
 pub use crate::exec::create_thread_syscall::exec;
 
+#[cfg(feature = "run_veh_syscall")]
+mod create_thread_veh_syscall;
+#[cfg(feature = "run_veh_syscall")]
+pub use crate::exec::create_thread_veh_syscall::exec;
+
+#[cfg(feature = "run_apc_veh_syscall")]
+mod apc_veh_syscall;
+#[cfg(feature = "run_apc_veh_syscall")]
+pub use crate::exec::apc_veh_syscall::exec;
+
 #[cfg(feature = "run_fiber")]
 mod fiber;
 #[cfg(feature = "run_fiber")]

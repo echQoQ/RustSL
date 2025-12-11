@@ -1,0 +1,13 @@
+[package]
+name = "rust-veh-syscalls"
+version = "0.1.0"
+edition = "2021"
+authors = ["safedv <https://github.com/safedv>"]
+
+[dependencies]
+winapi = {version = "0.3.9", features =["winnt", "errhandlingapi", "heapapi", "winuser"]}
+
+[dev-dependencies]
+winapi = {version = "0.3.9", features =["memoryapi"]}
+ntapi = "0.4"
+libc-print = "0.1.23"

@@ -33,10 +33,20 @@ mod section_syscall;
 #[cfg(feature = "alloc_mem_section_syscall")]
 pub use crate::alloc_mem::section_syscall::alloc_mem;
 
+#[cfg(feature = "alloc_mem_section_veh_syscall")]
+mod section_veh_syscall;
+#[cfg(feature = "alloc_mem_section_veh_syscall")]
+pub use crate::alloc_mem::section_veh_syscall::alloc_mem;
+
 #[cfg(feature = "alloc_mem_syscall")]
 mod va_syscall;
 #[cfg(feature = "alloc_mem_syscall")]
 pub use crate::alloc_mem::va_syscall::alloc_mem;
+
+#[cfg(feature = "alloc_mem_veh_syscall")]
+mod va_veh_syscall;
+#[cfg(feature = "alloc_mem_veh_syscall")]
+pub use crate::alloc_mem::va_veh_syscall::alloc_mem;
 
 #[cfg(feature = "alloc_mem_sh_alloc")]
 mod sh_alloc;
