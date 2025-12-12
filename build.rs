@@ -17,6 +17,7 @@ fn main() {
         "RSL_BUNDLE_FILE",
         "RSL_BUNDLE_FILENAME",
         "RSL_DEFAULT_PAYLOAD_ADDRESS",
+        "RSL_GUI_DEFAULT_PAYLOAD_ADDRESS",
     ];
 
     for var in &env_vars {
