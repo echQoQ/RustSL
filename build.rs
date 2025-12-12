@@ -32,13 +32,20 @@ fn main() {
     let default_payload_address = env::var("RSL_DEFAULT_PAYLOAD_ADDRESS").unwrap_or_else(|_| "encrypt.bin".to_string());
     println!("cargo:rustc-env=RSL_DEFAULT_PAYLOAD_ADDRESS={}", default_payload_address);
 
+    // Set compile-time environment variable for target program
+    let target_program = env::var("RSL_TARGET_PROGRAM").unwrap_or_else(|_| r"C:\Windows\System32\werfault.exe".to_string());
+    println!("cargo:rustc-env=RSL_TARGET_PROGRAM={}", target_program);
+
+    // Set compile-time environment variable for target PID
+    let target_pid = env::var("RSL_TARGET_PID").unwrap_or_else(|_| "0".to_string());
+    println!("cargo:rustc-env=RSL_TARGET_PID={}", target_pid);
+
     // Conditional compilation tasks
     if env::var("CARGO_FEATURE_WIN7").is_ok() {
         println!("cargo:note=Win7 兼容已启用，执行 thunk");
         thunk();
     }
 
-    generate_target_rs();
     generate_icon_rc();
 
     if env::var("CARGO_FEATURE_WITH_FORGERY").is_ok() {
@@ -48,34 +55,6 @@ fn main() {
     embed_resource::compile("icon.rc");
 }
 
-fn generate_target_rs() {
-    let target_path = std::path::Path::new("src/target.rs");
-
-    if env::var("CARGO_FEATURE_PATTERN2").is_ok() {
-        let target_program = env::var("RSL_TARGET_PROGRAM")
-            .unwrap_or_else(|_| r"C:\Windows\System32\werfault.exe".to_string());
-        let content = format!(
-            r#"use rustcrypt_ct_macros::{{obf_lit_bytes}};
-use std::sync::LazyLock;
-
-pub static TARGET_PROGRAM: LazyLock<Vec<u8>> = LazyLock::new(|| obf_lit_bytes!(br"{}"));
-"#,
-            target_program
-        );
-        fs::write(target_path, content).expect("Failed to write target.rs");
-        println!("cargo:note=Generated target.rs with TARGET_PROGRAM: {}", target_program);
-    } else if env::var("CARGO_FEATURE_PATTERN3").is_ok() {
-        let target_pid = env::var("RSL_TARGET_PID").unwrap_or_else(|_| "0".to_string());
-        let content = format!("pub const TARGET_PID: u32 = {};\n", target_pid);
-        fs::write(target_path, content).expect("Failed to write target.rs");
-        println!("cargo:note=Generated target.rs with TARGET_PID: {}", target_pid);
-    } else {
-        if target_path.exists() {
-            fs::remove_file(target_path).expect("Failed to remove target.rs");
-        }
-        println!("cargo:note=No need to generate target.rs for pattern1 or no pattern");
-    }
-}
 
 fn copy_bundle_file() {
     let bundle_file = env::var("RSL_BUNDLE_FILE")

