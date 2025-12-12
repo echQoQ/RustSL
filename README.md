@@ -335,15 +335,26 @@ set "RSL_ICON_PATH=icons\avp_0000.ico" && cargo build --release --no-default-fea
 
 ## 📸 免杀截图
 
-过火绒：
+### Windows Defender：
+![alt text](static/defender.png)
+
+### 过火绒：
 ![alt text](static/pass1.png)
 
-过微步：
-![alt text](static/pass2.png)
+### 过微步：
+![alt text](static/12-10-1.png)
+上线CS：
+![alt text](static/12-10-2.png)
 
-过360：
-![alt text](static/pass3.png)
+### 过奇安信沙箱：
+![alt text](static/pass_qianxin.png)
 
+### 过360沙箱：
+![alt text](static/pass_360sandbox.png)
+
+### 过360核晶：
+![alt text](pass_360.png)
+>360启发式检测，如果是QVM202报毒，可以尝试切换icon和签名
 
 ## ⚠️ 免责声明
 
