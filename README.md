@@ -384,10 +384,9 @@ set "RSL_BUNDLE_FILE=C:\path\to\your\file.pdf" && set "RSL_BUNDLE_FILENAME=docum
 - [felixmaker/thunk](https://github.com/felixmaker/thunk) - Windows 7 兼容性支持
 - [VC-LTL5](https://github.com/Chuyu-Team/VC-LTL5) - Windows 7 兼容性支持
 - [YY-Thunks](https://github.com/Chuyu-Team/YY-Thunks) - Windows 7 兼容性支持
+- [dinvoke_rs](https://github.com/Kudaes/DInvoke_rs)
+- [rust-veh-syscalls](https://github.com/safedv/RustVEHSyscalls)
 - Rust 社区
-- PyQt5 开发团队
-
-⭐ 如果这个项目对你有帮助，请给一个 Star！
 
 ## Star History
 
