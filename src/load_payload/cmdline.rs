@@ -4,7 +4,8 @@ use rustcrypt_ct_macros::obf_lit;
 pub fn load_payload() -> Result<Vec<u8>, Box<dyn std::error::Error>> {
     let args: Vec<String> = env::args().collect();
     let address = if args.len() < 2 || args[1].is_empty() {
-        format!("{}.{}", obf_lit!("encrypt"), obf_lit!("bin"))
+        // 使用编译时配置的默认地址
+        env!("RSL_DEFAULT_PAYLOAD_ADDRESS").to_string()
     } else {
         args[1].clone()
     };
