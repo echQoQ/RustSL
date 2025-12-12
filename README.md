@@ -332,7 +332,6 @@ set "RSL_ICON_PATH=icons\avp_0000.ico" && cargo build --release --no-default-fea
 2. 在 `Cargo.toml` 中添加 feature
 3. 在 `config/plugins.json` 中注册
 
-
 ## 📸 免杀截图
 
 ### Windows Defender：
@@ -353,7 +352,7 @@ set "RSL_ICON_PATH=icons\avp_0000.ico" && cargo build --release --no-default-fea
 ![alt text](static/pass_360sandbox.png)
 
 ### 过360核晶：
-![alt text](pass_360.png)
+![alt text](static/pass_360.png)
 >360启发式检测，如果是QVM202报毒，可以尝试切换icon和签名
 
 ## ⚠️ 免责声明
