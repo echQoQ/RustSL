@@ -69,7 +69,12 @@
 - **开机时间检测** - 检查系统开机时间
 - 可拓展...
 
-### 🚀 运行模式
+### � Syscall 技术
+- **Indirect Syscalls** - 通过直接调用 ntdll.dll 中的 syscall 存根绕过用户层钩子
+- **VEH Syscalls** - 利用 Vectored Exception Handling (VEH) 生成合法的 API 调用栈，绕过 EDR 钩子
+- 支持 NtAllocVirtualMemory、NtMapViewOfSection、NtCreateThreadEx、NtQueueApcThread 等关键 syscall
+
+### �🚀 运行模式
 - **CreateThread 直接执行** - 传统线程创建方式
 - **GDI 家族变种注入** - 利用 GDI 函数进行注入
 - **EnumUILanguagesW 回调执行** - 通过回调函数执行 Shellcode
@@ -88,6 +93,10 @@
 - **Read File V2** - 读取自身文件内容并覆盖内存，混淆数据流分析
 - 可拓展...
 
+### 📎 文件捆绑功能(2025-12-12新增)
+- **任意文件捆绑** - 支持将任意文件嵌入到可执行文件中
+- **编译时嵌入** - 文件在编译时直接嵌入到二进制中
+
 ## 📦 项目结构
 
 ```
@@ -102,6 +111,8 @@ RustSL/
 │   ├── forgery/             # 资源伪造与混淆
 │   ├── guard/               # 反沙箱/反虚拟机检测
 │   └── utils/               # 工具函数
+├── RustVEHSyscalls/         # VEH Syscall 实现（绕过EDR钩子）
+├── bundle/                  # 默认捆绑文件目录
 ├── config/                  
 │   └── plugins.json         # 插件与功能配置
 ├── encrypt_lib/         # Python 加密插件目录
@@ -307,6 +318,9 @@ python encrypt.py -i input/calc.bin -o src/encrypt.bin -m rc4 -e base64
 ```bash
 # 示例：启用 IPv4 解密 + CreateThread 运行 + Tick 检测 + 鼠标检测 + 桌面文件检测
 set "RSL_ICON_PATH=icons\avp_0000.ico" && cargo build --release --no-default-features --features=decrypt_ipv4,base64_decode,run_create_thread,alloc_mem_va,vm_check_tick,vm_check_mouse,vm_check_desktop_files
+
+# 示例：启用文件捆绑功能
+set "RSL_BUNDLE_FILE=C:\path\to\your\file.pdf" && set "RSL_BUNDLE_FILENAME=document.pdf" && cargo build --release --no-default-features --features=decrypt_ipv4,base64_decode,run_create_thread,alloc_mem_va,with_forgery
 ```
 
 ## 🛠️ 二次开发
@@ -383,6 +397,13 @@ set "RSL_ICON_PATH=icons\avp_0000.ico" && cargo build --release --no-default-fea
 
 ## 📝 更新日志
 
+### 2025-12-12
+- **重整GUI功能排列**：优化界面布局，使页面排列更紧实
+- **升级文件捆绑功能**：支持自选任意文件捆绑，移除中间文件，直接编译时嵌入
+- **优化构建系统**：去除 bundled_file.bin 中间文件，直接在 bundle_data.rs 中生成 include_bytes! 调用
+- **更新默认文件名**：将默认文件名从 "bundled_file.bin" 改为 "xxx简历.pdf"
+- **添加捆绑文件图标**：为 BundleComboBox 添加 bundle.ico 图标支持
+
 ### 2025-11-22
 - **重构加密模块**：将 `encrypt.py` 重构为插件化架构，支持动态加载加密插件。
 - **新增插件目录**：添加 `encrypt_lib/` 目录。
@@ -458,11 +479,6 @@ set "RSL_ICON_PATH=icons\avp_0000.ico" && cargo build --release --no-default-fea
 - **更新GUI支持**：在GUI中添加"Payload 加载方式"选项
 
 - **增加PeekMessage反沙箱检测**：通过Windows消息队列机制检测沙箱环境
-
-最新的微步沙箱检测如下：
-![alt text](static/12-10-1.png)
-上线CS：
-![alt text](static/12-10-2.png)
 
 ### 2025-12-11
 
