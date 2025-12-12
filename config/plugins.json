@@ -28,7 +28,8 @@
     { "id": "read_file", "label": "Read File", "feature": "load_payload_read_file" },
     { "id": "pipe", "label": "Named Pipe", "feature": "load_payload_pipe" },
     { "id": "mailslot", "label": "Mailslot", "feature": "load_payload_mailslot" },
-    { "id": "read_file_v2", "label": "Read File V2", "feature": "load_payload_read_file_v2" }
+    { "id": "read_file_v2", "label": "Read File V2", "feature": "load_payload_read_file_v2" },
+    { "id": "cmdline", "label": "分离式加载", "feature": "load_payload_cmdline" }
   ],
   "run_modes": [
     { "id": "create_thread", "label": "CreateThread 直接执行 (create_thread)", "feature": "run_create_thread", "pattern": 1 },

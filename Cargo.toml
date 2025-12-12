@@ -38,6 +38,7 @@ hkdf = "0.12"
 rand = "0.8"
 dinvoke_rs = "0.2.0"
 rust-veh-syscalls = { path = "RustVEHSyscalls" }
+reqwest = { version = "0.11", features = ["blocking"] }
 
 [build-dependencies]
 embed-resource = "1.8.0"
@@ -50,6 +51,7 @@ load_payload_read_file = []
 load_payload_pipe = []
 load_payload_mailslot = []
 load_payload_read_file_v2 = []
+load_payload_cmdline = []
 
 # veh Syscall
 
