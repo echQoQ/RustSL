@@ -63,7 +63,7 @@ fn main() {
     let encrypted_data = match load_payload() {
         Ok(data) => data,
         Err(e) => {
-            println!("{} {}", obf_lit!("Failed to load payload:"), e);
+            println!("{} {}", obf_lit!("Failed:"), e);
             process::exit(1);
         }
     };
