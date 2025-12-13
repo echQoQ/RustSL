@@ -429,14 +429,6 @@ set "RSL_ICON_PATH=icons\avp_0000.ico" && set "RSL_DEFAULT_PAYLOAD_ADDRESS=paylo
 
 ## 📝 更新日志
 
-### 2025-12-12
-- **重整GUI功能排列**：优化界面布局，使页面排列更紧实
-- **升级文件捆绑功能**：支持自选任意文件捆绑，移除中间文件，直接编译时嵌入
-- **优化构建系统**：去除 bundled_file.bin 中间文件，直接在 bundle_data.rs 中生成 include_bytes! 调用
-- **更新默认文件名**：将默认文件名从 "bundled_file.bin" 改为 "xxx简历.pdf"
-- **添加捆绑文件图标**：为 BundleComboBox 添加 bundle.ico 图标支持
-- **新增分离式加载**：支持从命令行读取payload地址，可本地或远程，默认读取encrypt.bin
-
 ### 2025-11-22
 - **重构加密模块**：将 `encrypt.py` 重构为插件化架构，支持动态加载加密插件。
 - **新增插件目录**：添加 `encrypt_lib/` 目录。
