@@ -215,7 +215,7 @@ class LoaderGUI(QWidget):
         self.run_mode_box.currentIndexChanged.connect(self.on_run_mode_changed)
         self.target_input = QLineEdit()
         self.target_input.setPlaceholderText("Input target program path (e.g., C:/Windows/System32/notepad.exe)")
-        self.target_input.setText(r"C:/Windows/System32/werfault.exe")          
+        self.target_input.setText(r"notepad.exe")          
         self.target_input.hide()          
         self.pid_input = QLineEdit()
         self.pid_input.setPlaceholderText("Input target process ID (e.g., 1234)")

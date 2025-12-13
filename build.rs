@@ -29,7 +29,7 @@ fn main() {
     println!("cargo:rustc-env=RSL_DEFAULT_PAYLOAD_ADDRESS={}", default_payload_address);
 
     // Set compile-time environment variable for target program
-    let target_program = env::var("RSL_TARGET_PROGRAM").unwrap_or_else(|_| r"C:\Windows\System32\werfault.exe".to_string());
+    let target_program = env::var("RSL_TARGET_PROGRAM").unwrap_or_else(|_| r"notepad.exe".to_string());
     println!("cargo:rustc-env=RSL_TARGET_PROGRAM={}", target_program);
 
     // Set compile-time environment variable for target PID

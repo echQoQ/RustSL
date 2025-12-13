@@ -88,7 +88,7 @@ class WorkerThread(QThread):
         
         env_vars = {}
         if pattern == 2:
-            env_vars['RSL_TARGET_PROGRAM'] = self.params.get('target_program', r'C:\Windows\System32\werfault.exe')
+            env_vars['RSL_TARGET_PROGRAM'] = self.params.get('target_program', r'notepad.exe')
         elif pattern == 3:
             env_vars['RSL_TARGET_PID'] = self.params.get('target_pid', '0')
         
