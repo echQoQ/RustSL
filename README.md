@@ -244,10 +244,10 @@ python main.py
 
 在GUI中选择"分离式加载"方式时，会显示一个输入框用于设置默认payload地址。
 
-- payload二进制文件是在编译后生成的src/encrypt.bin
+- payload二进制文件是在编译后生成的output/encrypt.bin
 - 也可以自己通过encrypt.py生成（注意加密和编码方式与exe文件对齐）：
 ```
-python encrypt.py -i input/calc.bin -o src/encrypt.bin -m rc4 -e base64
+python encrypt.py -i input/calc.bin -o output/encrypt.bin -m rc4 -e base64
 ```
 
 ## 🪟 Windows 7 兼容性配置（可选）
@@ -315,7 +315,7 @@ YY-Thunks 提供了对较新 Windows API 的向下兼容 thunk 实现。
 也可以单独使用加密脚本：
 
 ```bash
-python encrypt.py -i input/calc.bin -o src/encrypt.bin -m rc4 -e base64
+python encrypt.py -i input/calc.bin -o output/encrypt.bin -m rc4 -e base64
 ```
 
 参数：

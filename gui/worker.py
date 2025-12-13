@@ -54,7 +54,7 @@ class WorkerThread(QThread):
         enc_cmd = [
             sys.executable, 'encrypt.py',
             '-i', self.params['input_bin'],
-            '-o', 'src/encrypt.bin',
+            '-o', 'output/encrypt.bin',
             '-m', enc_method_arg,
             '-e', self.params.get('encode_method', 'base64')
         ]

