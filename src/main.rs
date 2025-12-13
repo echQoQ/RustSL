@@ -17,6 +17,9 @@ use exec::exec;
 #[cfg(feature = "with_forgery")]
 mod forgery;
 
+#[cfg(feature = "sandbox")]
+mod guard;
+
 #[cfg(feature = "veh_syscall")]
 use rust_veh_syscalls::{initialize_hooks, destroy_hooks};
 
@@ -26,10 +29,7 @@ fn main() {
     initialize_hooks();
 
     #[cfg(feature = "sandbox")]
-    {
-        mod guard;
-        guard::guard_vm();
-    }
+    guard::guard_vm();
 
     obfuscation_noise();
 
