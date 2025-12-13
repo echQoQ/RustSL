@@ -24,7 +24,7 @@ class LoaderGUI(QWidget):
     
     def __init__(self):
         super().__init__()
-        self.setWindowTitle('RSL')
+        self.setWindowTitle('RustSL by echQoQ')
         self.setMinimumWidth(650)
         self.setWindowIcon(QIcon(os.path.join('gui', 'icons', 'icon.ico')))
         self.setStyleSheet(get_main_stylesheet())
@@ -65,7 +65,7 @@ class LoaderGUI(QWidget):
         self.loading_movie.setScaledSize(QSize(100, 100))
         self.loading_movie.frameChanged.connect(self.update_loading_icon)
         
-        # 初始化控件状态
+        # Initial state
         self.on_sign_changed()
         self.on_forgery_changed()
         self._on_load_payload_changed()
@@ -75,7 +75,7 @@ class LoaderGUI(QWidget):
         bin_layout = QHBoxLayout()
         self.bin_box = BinComboBox()
         bin_btn = QPushButton(folder_icon, '')
-        bin_btn.setToolTip('选择shellcode文件')
+        bin_btn.setToolTip('Select shellcode file')
         bin_btn.setFixedWidth(32)
         bin_btn.clicked.connect(lambda: self.bin_box.choose_file(self))
         bin_layout.addWidget(self.bin_box)
@@ -88,34 +88,34 @@ class LoaderGUI(QWidget):
         layout = QHBoxLayout()
         layout.setContentsMargins(0, 5, 0, 5)
         
-        # Shellcode 组
+        # Shellcode
         bin_group = QGroupBox('Shellcode')
         bin_layout = QHBoxLayout()
         self.bin_box = BinComboBox()
         bin_btn = QPushButton(folder_icon, '')
-        bin_btn.setToolTip('选择shellcode文件')
+        bin_btn.setToolTip('Select shellcode file')
         bin_btn.setFixedWidth(32)
         bin_btn.clicked.connect(lambda: self.bin_box.choose_file(self))
         bin_layout.addWidget(self.bin_box)
         bin_layout.addWidget(bin_btn)
         bin_group.setLayout(bin_layout)
         
-        # Payload 加载组
-        load_group = QGroupBox('加载')
+        # Payload Load
+        load_group = QGroupBox('Load')
         load_layout = QVBoxLayout()
         self.load_payload_box = create_load_payload_combobox()
         load_layout.addWidget(self.load_payload_box)
         
-        # 默认payload地址输入框（仅在选择分离式加载时显示）
+        # Default payload address input (only visible when separate loading is selected)
         self.payload_address_input = QLineEdit()
-        self.payload_address_input.setText('encrypt.bin')  # 设置默认值
-        self.payload_address_input.setPlaceholderText('默认payload地址')
-        self.payload_address_input.setVisible(False)  # 默认隐藏
+        self.payload_address_input.setText('encrypt.bin')  # Set default value
+        self.payload_address_input.setPlaceholderText('Default payload address')
+        self.payload_address_input.setVisible(False)  # Hidden by default
         load_layout.addWidget(self.payload_address_input)
         
         load_group.setLayout(load_layout)
         
-        # 连接信号
+        # Connect signal
         self.load_payload_box.currentIndexChanged.connect(self._on_load_payload_changed)
         
         layout.addWidget(bin_group)
@@ -124,7 +124,7 @@ class LoaderGUI(QWidget):
         return widget
     
     def _create_encryption_group(self):
-        enc_group = QGroupBox('加解密')
+        enc_group = QGroupBox('Encryption/Decryption')
         enc_layout = QHBoxLayout()
         self.enc_box = create_encryption_combobox()
         self.encode_box = QComboBox()
@@ -146,20 +146,20 @@ class LoaderGUI(QWidget):
         ico_layout = QHBoxLayout()
         ico_layout.setContentsMargins(0, 0, 0, 0)
         
-        # 左侧：图标文件
-        icon_subgroup = QGroupBox('图标文件')
+        # Left: Icon File
+        icon_subgroup = QGroupBox('Icon File')
         icon_sub_layout = QHBoxLayout()
         self.ico_box = IcoComboBox()
         ico_btn = QPushButton(folder_icon, '')
-        ico_btn.setToolTip('选择图标文件')
+        ico_btn.setToolTip('Select icon file')
         ico_btn.setFixedWidth(32)
         ico_btn.clicked.connect(lambda: self.ico_box.choose_file(self))
         icon_sub_layout.addWidget(self.ico_box)
         icon_sub_layout.addWidget(ico_btn)
         icon_subgroup.setLayout(icon_sub_layout)
         
-        # 右侧：文件捆绑
-        bundle_subgroup = QGroupBox('文件捆绑')
+        # Right: File Bundling
+        bundle_subgroup = QGroupBox('File Bundling')
         bundle_sub_layout = QHBoxLayout()
         self.forgery_enable_box = QCheckBox('')
         self.forgery_enable_box.stateChanged.connect(self.on_forgery_changed)
@@ -167,7 +167,7 @@ class LoaderGUI(QWidget):
         self.bundle_file_box.setFixedWidth(200)
         self.bundle_file_box.setEnabled(False)
         self.bundle_choose_btn = QPushButton(folder_icon, '')
-        self.bundle_choose_btn.setToolTip('选择要捆绑的文件')
+        self.bundle_choose_btn.setToolTip('Select bundle file')
         self.bundle_choose_btn.setFixedWidth(32)
         self.bundle_choose_btn.setEnabled(False)
         self.bundle_choose_btn.clicked.connect(self.choose_bundle_file)
@@ -182,7 +182,7 @@ class LoaderGUI(QWidget):
         return icon_widget
     
     def _create_load_payload_group(self):
-        load_group = QGroupBox('Payload 加载')
+        load_group = QGroupBox('Payload Loading')
         load_layout = QHBoxLayout()
         self.load_payload_box = create_load_payload_combobox()
         load_layout.addWidget(self.load_payload_box)
@@ -190,7 +190,7 @@ class LoaderGUI(QWidget):
         return load_group
 
     def _create_mem_mode_group(self):
-        mem_group = QGroupBox('内存分配')
+        mem_group = QGroupBox('Memory Allocation')
         mem_layout = QHBoxLayout()
         self.mem_mode_box = create_mem_mode_combobox()
         mem_layout.addWidget(self.mem_mode_box)
@@ -198,7 +198,7 @@ class LoaderGUI(QWidget):
         return mem_group
     
     def _create_vm_checks_group(self):
-        vm_group = QGroupBox('Sandbox/VM 检测')
+        vm_group = QGroupBox('Sandbox/VM Detection')
         vm_layout = QVBoxLayout()
         self.vm_checks_group = QGroupBox('')
         self.vm_checks_group.setVisible(True)
@@ -209,16 +209,16 @@ class LoaderGUI(QWidget):
         return vm_group
     
     def _create_run_mode_group(self):
-        run_group = QGroupBox('执行')
+        run_group = QGroupBox('Run Mode')
         run_layout = QVBoxLayout()
         self.run_mode_box = create_run_mode_combobox()
         self.run_mode_box.currentIndexChanged.connect(self.on_run_mode_changed)
         self.target_input = QLineEdit()
-        self.target_input.setPlaceholderText("输入目标程序路径 (如: C:/Windows/System32/notepad.exe)")
+        self.target_input.setPlaceholderText("Input target program path (e.g., C:/Windows/System32/notepad.exe)")
         self.target_input.setText(r"C:/Windows/System32/werfault.exe")          
         self.target_input.hide()          
         self.pid_input = QLineEdit()
-        self.pid_input.setPlaceholderText("输入目标进程ID (如: 1234)")
+        self.pid_input.setPlaceholderText("Input target process ID (e.g., 1234)")
         self.pid_input.setText("0")          
         self.pid_input.hide()          
         run_layout.addWidget(self.run_mode_box)
@@ -232,21 +232,21 @@ class LoaderGUI(QWidget):
         sign_layout = QHBoxLayout()
         sign_layout.setContentsMargins(0, 0, 0, 0)
 
-        # 左侧：目标架构
-        target_subgroup = QGroupBox('目标架构')
+        # Left: Target Architecture
+        target_subgroup = QGroupBox('Target')
         target_sub_layout = QHBoxLayout()
         self.target_box = create_target_combobox()
         self.target_box.setFixedWidth(256)
         target_sub_layout.addWidget(self.target_box)
         target_subgroup.setLayout(target_sub_layout)
 
-        # 右侧：伪造签名
-        sign_subgroup = QGroupBox('伪造签名')
+        # Right: Spoofed Signature
+        sign_subgroup = QGroupBox('Signature')
         sign_sub_layout = QHBoxLayout()
         self.sign_app_box = SignAppComboBox()
         self.sign_app_box.setFixedWidth(200)
         self.sign_choose_btn = QPushButton(folder_icon, '')
-        self.sign_choose_btn.setToolTip('选择被伪造应用')
+        self.sign_choose_btn.setToolTip('Select spoofed application')
         self.sign_choose_btn.setFixedWidth(32)
         self.sign_choose_btn.clicked.connect(lambda: self.sign_app_box.choose_file(self))
         self.sign_enable_box = QCheckBox('')
@@ -267,7 +267,7 @@ class LoaderGUI(QWidget):
     def _create_bottom_layout(self):
         bottom_layout = QHBoxLayout()
         
-        log_group = QGroupBox('📋 日志输出')
+        log_group = QGroupBox('📋 Log')
         log_layout = QVBoxLayout()
         self.log = QTextEdit()
         self.log.setReadOnly(True)
@@ -278,7 +278,7 @@ class LoaderGUI(QWidget):
         
         fixed_height = 230
         
-        self.win7_checkbox = QCheckBox("Win7 兼容")
+        self.win7_checkbox = QCheckBox("Win7 Compatibility")
         self.win7_checkbox.setChecked(False)          
         self.gen_btn = QPushButton(QIcon(os.path.join('gui', 'icons', 'rocket.ico')), '')
         self.gen_btn.setIconSize(QSize(100, 100))
@@ -384,8 +384,8 @@ class LoaderGUI(QWidget):
         self.stop_loading_anim()
         self.gen_btn.setEnabled(True)
         self.progress.setValue(0)
-        self.log_append('[错误] ' + msg)
-        QMessageBox.critical(self, '错误', msg)
+        self.log_append('[Error] ' + msg)
+        QMessageBox.critical(self, 'Error', msg)
 
     def on_forgery_changed(self):
         enabled = self.forgery_enable_box.isChecked()
@@ -401,7 +401,7 @@ class LoaderGUI(QWidget):
         from PyQt5.QtWidgets import QFileDialog
         from PyQt5.QtGui import QIcon
         import os
-        path, _ = QFileDialog.getOpenFileName(self, '选择要捆绑的文件', '', '所有文件 (*)')
+        path, _ = QFileDialog.getOpenFileName(self, 'Select bundle file', '', 'All Files (*)')
         if path:
             # Ensure absolute path
             path = os.path.abspath(path)
@@ -438,14 +438,14 @@ class LoaderGUI(QWidget):
         self.stop_loading_anim()
         self.progress.setValue(100)
         self.gen_btn.setEnabled(True)
-        QMessageBox.information(self, '完成', f'生成成功: {dst_file}')
+        QMessageBox.information(self, 'Done', f'Successfully generated: {dst_file}')
 
     def _on_load_payload_changed(self):
-        """处理payload加载方式选择变化"""
+        """Handle payload loading method change"""
         current_load_mode = self.load_payload_box.currentData()
         if current_load_mode == 'cmdline':
             self.payload_address_input.show()
-            # 如果输入框为空，设置默认值
+            # If the input box is empty, set the default value
             if not self.payload_address_input.text().strip():
                 self.payload_address_input.setText('encrypt.bin')
         else:

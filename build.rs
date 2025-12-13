@@ -38,7 +38,7 @@ fn main() {
 
     // Conditional compilation tasks
     if env::var("CARGO_FEATURE_WIN7").is_ok() {
-        println!("cargo:note=Win7 兼容已启用，执行 thunk");
+        println!("cargo:note=Win7 Enabled, executing thunk");
         thunk();
     }
 
@@ -52,12 +52,7 @@ fn main() {
 
 
 fn copy_bundle_file() {
-    let bundle_file = env::var("RSL_BUNDLE_FILE")
-        .unwrap_or_else(|_| {
-            // Default to the resume file in bundle directory
-            let default_path = std::path::Path::new("bundle").join("xxx简历.pdf");
-            default_path.to_str().unwrap().to_string()
-        });
+    let bundle_file = env::var("RSL_BUNDLE_FILE").expect("RSL_BUNDLE_FILE environment variable must be set when using with_forgery feature");
 
     // Ensure absolute path
     let bundle_file = std::path::Path::new(&bundle_file);
@@ -68,8 +63,6 @@ fn copy_bundle_file() {
     };
     let bundle_file_str = bundle_file.to_str().unwrap();
 
-    // Generate bundle_data.rs with direct include_bytes! call
-    // Use raw string literal to avoid escaping issues
     let content = format!("pub const MEMORY_FILE: &[u8] = include_bytes!(r\"{}\");\n", bundle_file_str);
     fs::write("src/forgery/bundle_data.rs", content).expect("Failed to write bundle_data.rs");
 

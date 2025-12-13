@@ -30,7 +30,7 @@ class BinComboBox(QComboBox):
             self.setCurrentIndex(default_idx)
 
     def choose_file(self, parent=None):
-        path, _ = QFileDialog.getOpenFileName(parent, '选择bin文件', '.', 'Bin Files (*.bin);;All Files (*)')
+        path, _ = QFileDialog.getOpenFileName(parent, 'Select Bin File', '.', 'Bin Files (*.bin);;All Files (*)')
         if path:
             display_name = os.path.basename(path)
             bin_icon = QIcon(os.path.join('icons', 'bin.ico')) if os.path.exists(os.path.join('icons', 'bin.ico')) else QIcon()
@@ -62,7 +62,7 @@ class IcoComboBox(QComboBox):
             self.setCurrentIndex(0)
 
     def choose_file(self, parent=None):
-        path, _ = QFileDialog.getOpenFileName(parent, '选择图标文件', '.', 'Icon Files (*.ico);;All Files (*)')
+        path, _ = QFileDialog.getOpenFileName(parent, 'Select Icon File', '.', 'Icon Files (*.ico);;All Files (*)')
         if path:
             display_name = os.path.basename(path)
             for i in range(self.count()):
@@ -86,19 +86,14 @@ class BundleComboBox(QComboBox):
         self.clear()
         bundle_files = list_bundle_files()
         bundle_icon = QIcon(os.path.join('gui', 'icons', 'bundle.ico')) if os.path.exists(os.path.join('gui', 'icons', 'bundle.ico')) else QIcon()
-        if not bundle_files:
-            default_file = 'xxx简历.pdf'
-            default_path = os.path.abspath(os.path.join('bundle', default_file))
-            self.addItem(bundle_icon, default_file, default_path)
-        else:
-            for f in bundle_files:
-                file_path = os.path.abspath(os.path.join('bundle', f))
-                self.addItem(bundle_icon, f, file_path)
+        for f in bundle_files:
+            file_path = os.path.abspath(os.path.join('bundle', f))
+            self.addItem(bundle_icon, f, file_path)
         if self.count() > 0 and self.currentIndex() == -1:
             self.setCurrentIndex(0)
 
     def choose_file(self, parent=None):
-        path, _ = QFileDialog.getOpenFileName(parent, '选择要捆绑的文件', '.', 'All Files (*)')
+        path, _ = QFileDialog.getOpenFileName(parent, 'Select File to Bundle', '.', 'All Files (*)')
         if path:
             # Ensure absolute path
             path = os.path.abspath(path)

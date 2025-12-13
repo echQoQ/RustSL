@@ -29,7 +29,7 @@
     { "id": "pipe", "label": "Named Pipe", "feature": "load_payload_pipe" },
     { "id": "mailslot", "label": "Mailslot", "feature": "load_payload_mailslot" },
     { "id": "read_file_v2", "label": "Read File V2", "feature": "load_payload_read_file_v2" },
-    { "id": "cmdline", "label": "分离式加载", "feature": "load_payload_cmdline" }
+    { "id": "cmdline", "label": "Separate", "feature": "load_payload_cmdline" }
   ],
   "run_modes": [
     { "id": "create_thread", "label": "CreateThread", "feature": "run_create_thread", "pattern": 1 },
@@ -47,16 +47,16 @@
     { "id": "create_remote_thread", "label": "CreateRemoteThread", "feature": "run_create_remote_thread", "pattern": 3 }
   ],
   "vm_checks": [
-    { "id": "tick", "label": "Tick检测", "feature": "vm_check_tick" },
+    { "id": "tick", "label": "Tick Detection", "feature": "vm_check_tick" },
     { "id": "peek", "label": "Peek Message", "feature": "vm_check_peek" },
-    { "id": "mouse", "label": "鼠标轨迹", "feature": "vm_check_mouse" },
-    { "id": "desktop_files", "label": "桌面文件", "feature": "vm_check_desktop_files" },
-    { "id": "c_drive", "label": "C盘容量", "feature": "vm_check_c_drive" },
+    { "id": "mouse", "label": "Mouse", "feature": "vm_check_mouse" },
+    { "id": "desktop_files", "label": "Desktop Files", "feature": "vm_check_desktop_files" },
+    { "id": "c_drive", "label": "C Drive", "feature": "vm_check_c_drive" },
     { "id": "api_flood", "label": "API Flood", "feature": "vm_check_api_flood" },
-    { "id": "uptime", "label": "开机时间", "feature": "vm_check_uptime" },
-    { "id": "cpu_info", "label": "CPU检测", "feature": "vm_check_cpu_info" },
+    { "id": "uptime", "label": "Uptime", "feature": "vm_check_uptime" },
+    { "id": "cpu_info", "label": "CPU Detection", "feature": "vm_check_cpu_info" },
     { "id": "rdtsc_timing", "label": "RDTSC", "feature": "vm_check_rdtsc_timing" },
-    { "id": "usb_mount", "label": "USB设备", "feature": "vm_check_usb_mount" }
+    { "id": "usb_mount", "label": "USB Devices", "feature": "vm_check_usb_mount" }
   ],
   "encodings": [
     { "id": "base64", "label": "Base64", "feature": "base64_decode" },
