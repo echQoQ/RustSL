@@ -1,6 +1,17 @@
 use windows_sys::Win32::System::LibraryLoader::{LoadLibraryA, GetProcAddress};
 use rustcrypt_ct_macros::obf_lit;
 
+#[allow(dead_code)]
+pub fn simple_decrypt(encrypted: &str) -> String {
+    use rustcrypt_ct_macros::obf_lit_bytes;
+    use base64::{Engine as _, engine::general_purpose};
+    let decoded = general_purpose::STANDARD.decode(encrypted).unwrap();
+    let obf_key = obf_lit_bytes!(b"rsl_secret_key_2025");
+    let key = obf_key.as_slice();
+    let decrypted: Vec<u8> = decoded.iter().enumerate().map(|(i, &b)| b ^ key[i % key.len()]).collect();
+    String::from_utf8(decrypted).unwrap()
+}
+
 pub unsafe fn load_library(dll_name: &[u8]) -> Result<isize, String> {
     let dll = LoadLibraryA(dll_name.as_ptr() as *const u8);
     if dll == 0 {
