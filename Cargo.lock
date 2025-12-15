@@ -719,6 +719,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2874a2af47a2325c2001a6e6fad9b16a53b802102b528163885171cf92b15976"
 
 [[package]]
+name = "libc-print"
+version = "0.1.23"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a4a660208db49e35faf57b37484350f1a61072f2a5becf0592af6015d9ddd4b0"
+dependencies = [
+ "libc",
+]
+
+[[package]]
 name = "libredox"
 version = "0.1.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -806,6 +815,15 @@ dependencies = [
  "cfg-if",
  "cfg_aliases",
  "libc",
+]
+
+[[package]]
+name = "ntapi"
+version = "0.4.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e8a3895c6391c39d7fe7ebc444a87eb2991b2a0bc718fdabd071eec617fc68e4"
+dependencies = [
+ "winapi",
 ]
 
 [[package]]
@@ -1204,6 +1222,7 @@ dependencies = [
  "quote",
  "rand",
  "rc4",
+ "rsl-macros",
  "rust-veh-syscalls",
  "serde",
  "sha2",
@@ -1219,9 +1238,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "rsl-macros"
+version = "0.1.0"
+dependencies = [
+ "base64",
+ "proc-macro2",
+ "quote",
+ "rand",
+ "syn 2.0.87",
+]
+
+[[package]]
 name = "rust-veh-syscalls"
 version = "0.1.0"
 dependencies = [
+ "libc-print",
+ "ntapi",
  "winapi",
 ]
 

