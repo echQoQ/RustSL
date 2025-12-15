@@ -492,3 +492,8 @@ set "RSL_ICON_PATH=icons\avp_0000.ico" && set "RSL_DEFAULT_PAYLOAD_ADDRESS=paylo
 ### 2025-12-13
 
 - 添加debug特性，编译时启用可输出更多日志便于调试
+
+### 2025-12-15
+
+- 添加了几种反沙箱
+- 更改了混淆字符串的依赖库
