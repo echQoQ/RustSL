@@ -47,69 +47,6 @@ pub unsafe fn get_proc_address(dll: isize, name: &[u8]) -> Result<*const (), Str
 }
 
 #[allow(dead_code)]
-pub fn obfuscation_noise() {
-    use std::collections::HashMap;
-    use obfstr::obfbytes;
-    use rand::Rng;
-    
-    // Additional obfuscation noise
-    let mut rng = rand::thread_rng();
-    let _dummy = (0..rng.gen_range(10..50)).map(|x: i32| x.wrapping_mul(7)).sum::<i32>();
-            
-    let mut hash_map: HashMap<i32, String> = HashMap::new();
-    let map_size = rng.gen_range(5..15);
-    for _ in 0..map_size {
-        let key = rng.gen::<i32>();
-        let val = format!("value_{}", rng.gen::<u32>());
-        hash_map.insert(key, val);
-    }
-    
-    let mut sum: u64 = 0;
-    let sum_iterations = rng.gen_range(500..1500);
-    for i in 0..sum_iterations {
-        sum = sum.wrapping_add((i as u64).wrapping_mul(rng.gen::<u64>()));
-    }
-    
-    let test_str = obfbytes!(b"random_buffer_data");
-    let mut buffer: Vec<u8> = test_str.iter().map(|b: &u8| b.wrapping_add(rng.gen::<u8>())).collect();
-    if rng.gen_bool(0.5) {
-        buffer.reverse();
-    }
-    let _ = buffer.len();
-    
-    let filter_mod = rng.gen_range(2..5);
-    let _result: Vec<i32> = (0..rng.gen_range(50..150))
-        .filter(|x| x % filter_mod == 0)
-        .map(|x| x * x)
-        .take(rng.gen_range(10..30))
-        .collect();
-    
-    use std::time::Instant;
-    let _start = Instant::now();
-    let loop_count = rng.gen_range(50000..150000);
-    for _ in 0..loop_count {
-        let _ = (rng.gen::<i32>()).wrapping_mul(rng.gen::<i32>());
-    }
-    
-    let mut val: u32 = rng.gen::<u32>();
-    let shift_count = rng.gen_range(5..10);
-    for _ in 0..shift_count {
-        val = val.wrapping_shl(1) ^ val.wrapping_shr(3);
-    }
-    let _ = val;
-    
-    for (k, v) in hash_map.iter() {
-        let _ = format!("{}={}", k, v);
-    }
-    
-    let sum_range = rng.gen_range(20..80);
-    let _ = (0..sum_range).map(|x| x * x).sum::<i32>();
-    
-    // Additional obfuscation noise
-    let _final_noise = rng.gen::<u64>().wrapping_add(rng.gen::<u64>());
-}
-
-#[allow(dead_code)]
 pub fn http_get(url: &str) -> Result<(u16, Vec<u8>), String> {
     use windows::core::PCWSTR;
     use windows::Win32::Networking::WinHttp::{

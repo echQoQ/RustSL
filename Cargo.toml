@@ -5,6 +5,9 @@ name = "rsl"
 version = "1.1.1"
 edition = "2021"
 
+[lib]
+proc-macro = true
+
 [dependencies]
 tempfile = "3.10.1"
 base64 = "0.21.5"
@@ -39,6 +42,10 @@ rand = "0.8"
 dinvoke_rs = "0.2.0"
 rust-veh-syscalls = { path = "RustVEHSyscalls" }
 colored = "2.0"
+cryptify = "3.1.1"
+proc-macro2 = "1.0"
+quote = "1.0"
+syn = { version = "2.0", features = ["full"] }
 
 [build-dependencies]
 embed-resource = "1.8.0"

