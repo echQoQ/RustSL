@@ -1,4 +1,12 @@
 mod tick;
+#[cfg(feature = "vm_check_edge")]
+mod edge;
+#[cfg(feature = "vm_check_time")]
+mod time;
+#[cfg(feature = "vm_check_ip")]
+mod ip;
+#[cfg(feature = "vm_check_prime")]
+mod prime;
 mod mouse;
 mod desktop_files;
 mod api_flood;
@@ -7,7 +15,6 @@ mod uptime;
 mod usb_mount;
 mod cpu_info;
 mod rdtsc_timing;
-mod peek;
 
 #[cfg(feature = "sandbox")]
 pub fn guard_vm() -> bool {
@@ -59,8 +66,16 @@ pub fn guard_vm() -> bool {
         if rdtsc_timing::check_rdtsc_sandboxed(sleep_ms, threshold_ratio) { return true; }
     }
 
-    #[cfg(feature = "vm_check_peek")]
-    if let Err(_) = peek::check() { return true; }
+    #[cfg(feature = "vm_check_prime")]
+    if !prime::check_prime() { return true; }
 
+    #[cfg(feature = "vm_check_edge")]
+    if !edge::check_edge() { return true; }
+
+    #[cfg(feature = "vm_check_time")]
+    if !time::check_time() { return true; }
+
+    #[cfg(feature = "vm_check_ip")]
+    if !ip::check_ip() { return true; }
     false
 }

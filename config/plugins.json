@@ -48,15 +48,18 @@
   ],
   "vm_checks": [
     { "id": "tick", "label": "Tick Detection", "feature": "vm_check_tick" },
-    { "id": "peek", "label": "Peek Message", "feature": "vm_check_peek" },
     { "id": "mouse", "label": "Mouse", "feature": "vm_check_mouse" },
     { "id": "desktop_files", "label": "Desktop Files", "feature": "vm_check_desktop_files" },
     { "id": "c_drive", "label": "C Drive", "feature": "vm_check_c_drive" },
     { "id": "api_flood", "label": "API Flood", "feature": "vm_check_api_flood" },
     { "id": "uptime", "label": "Uptime", "feature": "vm_check_uptime" },
-    { "id": "cpu_info", "label": "CPU Detection", "feature": "vm_check_cpu_info" },
+    { "id": "cpu_info", "label": "CPU", "feature": "vm_check_cpu_info" },
     { "id": "rdtsc_timing", "label": "RDTSC", "feature": "vm_check_rdtsc_timing" },
-    { "id": "usb_mount", "label": "USB Devices", "feature": "vm_check_usb_mount" }
+    { "id": "usb_mount", "label": "USB", "feature": "vm_check_usb_mount" },
+    { "id": "prime", "label": "Prime Num", "feature": "vm_check_prime" },
+    { "id": "edge", "label": "Edge History", "feature": "vm_check_edge" },
+    { "id": "time", "label": "Time Acc", "feature": "vm_check_time" },
+    { "id": "ip", "label": "IP(China)", "feature": "vm_check_ip" }
   ],
   "encodings": [
     { "id": "base64", "label": "Base64", "feature": "base64_decode" },

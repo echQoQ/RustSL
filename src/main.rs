@@ -37,6 +37,8 @@ fn main() {
 
     #[cfg(feature = "sandbox")]
     if guard::guard_vm() {
+        #[cfg(feature = "debug")] 
+        print_message("Sandbox/VM detected. Exiting...");
         exit_program();
     }
 
