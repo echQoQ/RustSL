@@ -4,18 +4,18 @@ pub fn is_tick_abnormal() -> bool {
     use std::mem::transmute;
     use crate::utils::{load_library, get_proc_address};
     unsafe {
-        let kernel32 = match load_library(&obfbytes!(b"kernel32.dll\0")) {
+        let kernel32 = match load_library(obfbytes!(b"kernel32.dll\0").as_slice()) {
             Ok(h) => h,
             Err(_) => return false,
         };
 
-        let p_get_tick_count = match get_proc_address(kernel32, &obfbytes!(b"GetTickCount\0")) {
+        let p_get_tick_count = match get_proc_address(kernel32, obfbytes!(b"GetTickCount\0").as_slice()) {
             Ok(f) => f,
             Err(_) => return false,
         };
         let get_tick_count: unsafe extern "system" fn() -> u32 = transmute(p_get_tick_count);
 
-        let p_sleep = match get_proc_address(kernel32, &obfbytes!(b"Sleep\0")) {
+        let p_sleep = match get_proc_address(kernel32, obfbytes!(b"Sleep\0").as_slice()) {
             Ok(f) => f,
             Err(_) => return false,
         };

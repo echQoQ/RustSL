@@ -24,7 +24,7 @@ pub unsafe fn alloc_mem(size: usize) -> Result<*mut u8, String> {
     let mut old_protect = 0u32;
     let ok = virtual_protect(p, size, 0x40, &mut old_protect); // PAGE_EXECUTE_READWRITE
     if ok == 0 {
-        return Err(obf_lit!("VirtualProtect failed").to_string());
+        return Err(obfstr!("VirtualProtect failed").to_string());
     }
     Ok(p as *mut u8)
 }

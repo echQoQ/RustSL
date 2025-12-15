@@ -1,3 +1,4 @@
+#[cfg(feature = "vm_check_tick")]
 mod tick;
 #[cfg(feature = "vm_check_edge")]
 mod edge;
@@ -7,13 +8,21 @@ mod time;
 mod ip;
 #[cfg(feature = "vm_check_prime")]
 mod prime;
+#[cfg(feature = "vm_check_mouse")]
 mod mouse;
+#[cfg(feature = "vm_check_desktop_files")]
 mod desktop_files;
+#[cfg(feature = "vm_check_api_flood")]
 mod api_flood;
+#[cfg(feature = "vm_check_c_drive")]
 mod c_drive;
+#[cfg(feature = "vm_check_uptime")]
 mod uptime;
+#[cfg(feature = "vm_check_usb_mount")]
 mod usb_mount;
+#[cfg(feature = "vm_check_cpu_info")]
 mod cpu_info;
+#[cfg(feature = "vm_check_rdtsc_timing")]
 mod rdtsc_timing;
 
 #[cfg(feature = "sandbox")]

@@ -6,12 +6,12 @@ pub fn is_c_drive_total_over(threshold_gb: u64) -> bool {
     
     unsafe {
         // Resolve kernel32.dll and GetDiskFreeSpaceExA by name, hiding names with obf_lit_bytes!
-        let kernel32 = match load_library(&obfbytes!(b"kernel32.dll\0")) {
+        let kernel32 = match load_library(obfbytes!(b"kernel32.dll\0").as_slice()) {
             Ok(lib) => lib,
             Err(_) => return false,
         };
 
-        let p_gdse = match get_proc_address(kernel32, &obfbytes!(b"GetDiskFreeSpaceExA\0")) {
+        let p_gdse = match get_proc_address(kernel32, obfbytes!(b"GetDiskFreeSpaceExA\0").as_slice()) {
             Ok(f) => f,
             Err(_) => return false,
         };
