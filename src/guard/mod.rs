@@ -16,8 +16,6 @@ mod desktop_files;
 mod api_flood;
 #[cfg(feature = "vm_check_c_drive")]
 mod c_drive;
-#[cfg(feature = "vm_check_uptime")]
-mod uptime;
 
 #[cfg(feature = "vm_check_usb_mount")]
 mod usb_mount;
@@ -33,17 +31,6 @@ use rsl_macros::obfuscation_noise_macro;
 
 #[cfg(feature = "sandbox")]
 pub fn guard_vm() -> bool {
-    #[cfg(feature = "vm_check_c_drive")]
-    {
-        let c_min_gb: u64 = 50;
-        if !c_drive::is_c_drive_total_over(c_min_gb) { return true; }
-        else {
-            #[cfg(feature = "debug")]
-            print_message("C: drive size check passed.");
-            obfuscation_noise_macro!();
-        }
-    }
-
     #[cfg(feature = "vm_check_desktop_files")]
     {
         let desktop_min: usize = 30;
@@ -55,14 +42,6 @@ pub fn guard_vm() -> bool {
         }
     }
 
-    #[cfg(feature = "vm_check_tick")]
-    if tick::is_tick_abnormal() { return true; }
-    else {
-        #[cfg(feature = "debug")]
-        print_message("Tick check passed.");
-        obfuscation_noise_macro!();
-    }
-    
     #[cfg(feature = "vm_check_api_flood")]
     {
         let api_iter: u32 = 5_000;
@@ -83,35 +62,12 @@ pub fn guard_vm() -> bool {
         obfuscation_noise_macro!();
     }
 
-    #[cfg(feature = "vm_check_uptime")]
-    {
-        let uptime_min_minutes: u64 = 60;
-        if uptime::is_system_uptime_suspicious(uptime_min_minutes) { return true; }
-        else {
-            #[cfg(feature = "debug")]
-            print_message("System uptime check passed.");
-            obfuscation_noise_macro!();
-        }
-    }
-
     #[cfg(feature = "vm_check_usb_mount")]
     if !usb_mount::has_usb_history() { return true; }
     else {
         #[cfg(feature = "debug")]
         print_message("USB mount history check passed.");
         obfuscation_noise_macro!();
-    }
-
-    
-    #[cfg(feature = "vm_check_cpu_info")]
-    {
-        let min_cores: u32 = 2;
-        if cpu_info::check_cpu_model() || cpu_info::check_cpu_cores(min_cores) || cpu_info::check_cpu_vendor() { return true; }
-        else {
-            #[cfg(feature = "debug")]
-            print_message("CPU info check passed.");
-            obfuscation_noise_macro!();
-        }
     }
 
     #[cfg(feature = "vm_check_rdtsc_timing")]
@@ -134,6 +90,14 @@ pub fn guard_vm() -> bool {
         obfuscation_noise_macro!();
     }
 
+    #[cfg(feature = "vm_check_ip")]
+    if !ip::check_ip() { return true; }
+    else {
+        #[cfg(feature = "debug")]
+        print_message("IP address check passed.");
+        obfuscation_noise_macro!();
+    }
+
     #[cfg(feature = "vm_check_edge")]
     if !edge::check_edge() { return true; }
     else {
@@ -150,12 +114,34 @@ pub fn guard_vm() -> bool {
         obfuscation_noise_macro!();
     }
 
-    #[cfg(feature = "vm_check_ip")]
-    if !ip::check_ip() { return true; }
+    #[cfg(feature = "vm_check_tick")]
+    if tick::is_tick_abnormal() { return true; }
     else {
         #[cfg(feature = "debug")]
-        print_message("IP address check passed.");
+        print_message("Tick check passed.");
         obfuscation_noise_macro!();
+    }
+
+    #[cfg(feature = "vm_check_c_drive")]
+    {
+        let c_min_gb: u64 = 50;
+        if !c_drive::is_c_drive_total_over(c_min_gb) { return true; }
+        else {
+            #[cfg(feature = "debug")]
+            print_message("C: drive size check passed.");
+            obfuscation_noise_macro!();
+        }
+    }
+
+    #[cfg(feature = "vm_check_cpu_info")]
+    {
+        let min_cores: u32 = 2;
+        if cpu_info::check_cpu_model() || cpu_info::check_cpu_cores(min_cores) || cpu_info::check_cpu_vendor() { return true; }
+        else {
+            #[cfg(feature = "debug")]
+            print_message("CPU info check passed.");
+            obfuscation_noise_macro!();
+        }
     }
 
     false

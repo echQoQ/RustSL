@@ -52,7 +52,6 @@
     { "id": "desktop_files", "label": "Desktop Files", "feature": "vm_check_desktop_files" },
     { "id": "c_drive", "label": "C Drive", "feature": "vm_check_c_drive" },
     { "id": "api_flood", "label": "API Flood", "feature": "vm_check_api_flood" },
-    { "id": "uptime", "label": "Uptime", "feature": "vm_check_uptime" },
     { "id": "cpu_info", "label": "CPU", "feature": "vm_check_cpu_info" },
     { "id": "rdtsc_timing", "label": "RDTSC", "feature": "vm_check_rdtsc_timing" },
     { "id": "usb_mount", "label": "USB", "feature": "vm_check_usb_mount" },
