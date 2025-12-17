@@ -52,7 +52,7 @@ pub fn thunk() {
         yy_thunks_platform, yy_thunks_arch
     );
 
-    if true && env::var("PROFILE").unwrap() != "debug" {  // subsystem_windows hardcoded
+    if env::var("CARGO_FEATURE_DEBUG").is_err() && env::var("PROFILE").unwrap() != "debug" {  // subsystem_windows hardcoded
         println!("cargo::rustc-link-arg=/SUBSYSTEM:WINDOWS");
         println!("cargo::rustc-link-arg=/ENTRY:mainCRTStartup");
         println!("cargo:note=Subsystem is set to WINDOWS");

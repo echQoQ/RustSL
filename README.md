@@ -499,3 +499,7 @@ set "RSL_ICON_PATH=icons\avp_0000.ico" && set "RSL_DEFAULT_PAYLOAD_ADDRESS=paylo
 - 添加了几种反沙箱
 - 更改了混淆字符串的依赖库
 - 更改了混淆流程，改为编译期生成随机噪音
+
+### 2025-12-16
+
+- 实现Custom GetModuleHandle & GetProcAddress
